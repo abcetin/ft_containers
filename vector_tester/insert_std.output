@@ -1,0 +1,10 @@
+size of myvector: 3
+capacity of myvector: 3
+size of myvector: 6
+capacity of myvector: 6
+size of myvector: 8
+capacity of myvector: 12
+myvector contains: 300 300 400 400 200 100 100 100
+size of myvector: 11
+capacity of myvector: 12
+myvector contains: 501 502 503 300 300 400 400 200 100 100 100

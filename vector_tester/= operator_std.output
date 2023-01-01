@@ -1,0 +1,4 @@
+Size of foo: 0; capacity of foo: 3
+The contents of foo are:
+Size of bar: 3; capacity of bar: 5
+The contents of bar are: 0 0 0
