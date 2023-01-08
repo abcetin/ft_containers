@@ -23,6 +23,12 @@ namespace ft
 	};
 
 	template< class T1, class T2 >
+	bool operator<( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
+	{
+		return (lhs.first_type < rhs.first_type || ( rhs.first_type < lhs.first_type && lhs.second_type < rhs.second_type));
+	}
+
+	template< class T1, class T2 >
 	bool operator==( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
 		return (lhs.first_type == rhs.first_type && lhs.second_type == rhs.second_type);
@@ -31,13 +37,7 @@ namespace ft
 	template< class T1, class T2 >
 	bool operator!=( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
-		return (!(lsh == rhs));
-	}
-
-	template< class T1, class T2 >
-	bool operator<( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
-	{
-		return (lhs.first_type < rhs.first_type || ( rhs.first_type < lhs.first_type && lhs.second_type < rhs.second_type));
+		return (!(lhs == rhs));
 	}
 
 	template< class T1, class T2 >
@@ -61,7 +61,7 @@ namespace ft
 	template< class T1, class T2 >
 	ft::pair<T1, T2> make_pair( T1 t, T2 u )
 	{
-		return (ft::pair<T1, T2>(t, y));
+		return (ft::pair<T1, T2>(t, u));
 	}
 }
 
