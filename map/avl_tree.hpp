@@ -9,10 +9,12 @@ namespace ft
 	{	
 			public:
 				node<T> *_tree;
+				node<T> *_start;
+				node<T> *_end;
 
 				typedef T							value_type;
 				typedef const ft::tree_iterator<T>	const_iterator;
-				typedef const_iterator				iterator;
+				typedef ft::tree_iterator<T>		iterator; // const_iterator yap sonra
 				typedef const_iterator				const_reverse_iterator; //hepsinin const olmasının sebebi ağaçta verilerin yeniden atanmasını istemiyoruz.
 				typedef const_iterator				reverse_iterator;		//avl_ağaç yapısını bozabileceği için eğer atama iterator ile yapılırsa hatalı çalışmalara sebep olabilir.
 
@@ -25,6 +27,10 @@ namespace ft
 
 				y->left_node = x;
 				x->right_node = z;
+				if (x)
+					x->parent_node = y;
+				if (z)
+					z->parent_node = x;
 				x->height = std::max(height(x->left_node), height(x->right_node)) + 1;
 				y->height = std::max(height(y->left_node), height(y->right_node)) + 1;
 				return y;
@@ -37,6 +43,10 @@ namespace ft
 
 				y->right_node = x;
 				x->left_node = z;
+				if (x)
+					x->parent_node = y;
+				if (z)
+					z->parent_node = x;
 				x->height = std::max(height(x->left_node), height(x->right_node)) + 1;
 				y->height = std::max(height(y->left_node), height(y->right_node)) + 1;
 				return y;
@@ -100,14 +110,14 @@ namespace ft
 				return _node;
 			}
 
-			node<T>* add_with_balance(node<T> *_node, const T& _value)
+			node<T>* add_with_balance(node<T> *_node, const T& _value, node<T>* parent)
 			{
 				if (!_node)
-					return (new node<T>(_value));
+					return (new node<T>(_value, NULL, NULL, parent));
 				else if (_value < _node->data)
-					_node->left_node = add_with_balance(_node->left_node, _value);
+					_node->left_node = add_with_balance(_node->left_node, _value, _node);
 				else if (_value >= _node->data)
-					_node->right_node = add_with_balance(_node->right_node, _value);
+					_node->right_node = add_with_balance(_node->right_node, _value, _node);
 				else
 					return _node;
 				_node->height = 1 + std::max(height(_node->left_node), height(_node->right_node));
@@ -133,11 +143,12 @@ namespace ft
 				return _node->height;
 			}
 		public:
-			avl_tree(): _tree(){}
+			avl_tree(): _tree(), _start(), _end() {}
 
 			void insert(const T& _value)
 			{	
-				this->_tree = add_with_balance(this->_tree, _value);
+				this->_tree = add_with_balance(this->_tree, _value, this->_tree);
+				this->_start = this->_tree;
 			}
 
 			int get_balance(node<T> *_node)
@@ -163,32 +174,17 @@ namespace ft
 			void _delete_node(const T& _value)
 			{
 				this->_tree = delete_node(this->_tree, _value);
+				this->_start = this->_tree->_minimum(this->_tree->right_node);
 			}
 
-			node<T> *_minimum(node<T>* _x)
+			const_iterator begin() const
 			{
-				if (!_x || !_x->left_node)
-					return _x;
-				return (_x->left_node);
+				return const_iterator(this->_start);
 			}
 
-			node<T> *_maxmimum(node<T>* _x)
+			iterator begin()
 			{
-				if (!_x || !_x->right_node)
-					return _x;
-				return (_x->right_node);
-			}
-
-			const_iterator begin() const //ağaçtaki minimum elemanın bulunmasını sağlar
-			{
-				node<T> *temp = this->_tree;
-				return const_iterator(_minimum(temp));
-			}
-
-			iterator begin() //ağaçtaki minimum elemanın bulunmasını sağlar
-			{
-				node<T> *temp = this->_tree;
-				return iterator(_minimum(temp));
+				return iterator(this->_start);
 			}
 
 			const_iterator end() const //end nullptr döndürür

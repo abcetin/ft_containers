@@ -7,7 +7,10 @@ void print_tree(ft::node<int> *avl, std::string str)
 	{
 		return;
 	}
-	std::cout << str << " " << avl->data << std::endl;
+	std::cout << str << " " << avl->data << " ";
+	if (avl->parent_node)
+		std::cout << "parent :"<<avl->parent_node->data;
+	std::cout << std::endl;
 	print_tree(avl->left_node, str + " left");
 	print_tree(avl->right_node, str + " right");
 }
@@ -15,7 +18,8 @@ void print_tree(ft::node<int> *avl, std::string str)
 int main()
 {
 	ft::avl_tree<int> tree;
-	//ft::node<int> *temp;
+	ft::node<int> *temp;
+	tree.insert(11);
 	tree.insert(10);
 	// std::cout << "balance " << tree.get_balance(tree._tree) << std::endl;
 	// std::cout << "node : " << tree._tree->data << std::endl;
@@ -103,7 +107,7 @@ int main()
 	// std::cout << "delete" << std::endl;
 	// tree._delete_node(80);
 	// std::cout << "balance " << tree.get_balance(tree._tree) << std::endl;
-	// std::cout << "node : " << tree._tree->data << std::endl;
+	 
 	// temp = tree._tree;
 	// print_tree(temp->left_node, "left");
 	// print_tree(temp->right_node, "right");
@@ -113,21 +117,34 @@ int main()
 	tree.insert(1);
 	tree.insert(0);
 	tree.insert(-1);
-	tree.insert(-1);
-	tree.insert(-1);
-
+	tree.insert(-2);
+	tree.insert(-3);
+	std::cout << "node : " << tree._tree->data << std::endl;
+	temp = tree._tree;
+	print_tree(temp->left_node, "left");
+	print_tree(temp->right_node, "right");
+	std::cout << "----------------------------\n";
 	ft::avl_tree<int>::iterator iter = tree.begin();
+	std::cout << *iter << std::endl;
+	iter++;
+	std::cout << *iter << std::endl;
+	iter++;
+	std::cout << *iter << std::endl;
+	iter++;
+	std::cout << *iter << std::endl;
+	// iter++;
+	// std::cout << *iter << std::endl;
 	std::map<char,int> mymap;
 
-  	mymap['a'] = 100;
-  	mymap['b'] = 200;
-  	mymap['c'] = 300;
-	mymap['d'] = 400;
-  	mymap['e'] = 500;
-  	mymap['f'] = 600;
-	mymap['g'] = 700;
-  	mymap['h'] = 800;
-  	mymap['i'] = 900;
-	 for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+  	// mymap['a'] = 100;
+  	// mymap['b'] = 200;
+  	// mymap['c'] = 300;
+	// mymap['d'] = 400;
+  	// mymap['e'] = 500;
+  	// mymap['f'] = 600;
+	// mymap['g'] = 700;
+  	// mymap['h'] = 800;
+  	// mymap['i'] = 900;
+	//  for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+    // std::cout << it->first << " => " << it->second << '\n';
 }
