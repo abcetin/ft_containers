@@ -8,13 +8,14 @@ namespace ft
 	template <typename T> class avl_tree
 	{	
 			public:
+				node<T> *_tree;
+
 				typedef T							value_type;
-				typedef const tree_iterator<T>		const_iterator;
+				typedef const ft::tree_iterator<T>	const_iterator;
 				typedef const_iterator				iterator;
 				typedef const_iterator				const_reverse_iterator; //hepsinin const olmasının sebebi ağaçta verilerin yeniden atanmasını istemiyoruz.
 				typedef const_iterator				reverse_iterator;		//avl_ağaç yapısını bozabileceği için eğer atama iterator ile yapılırsa hatalı çalışmalara sebep olabilir.
 
-				node<T> *_tree;
 			private:
 
 			node<T> *RR(node<T> *x)

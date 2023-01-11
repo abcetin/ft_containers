@@ -1,4 +1,5 @@
 #include "avl_tree.hpp"
+#include <map>
 
 void print_tree(ft::node<int> *avl, std::string str)
 {
@@ -14,7 +15,7 @@ void print_tree(ft::node<int> *avl, std::string str)
 int main()
 {
 	ft::avl_tree<int> tree;
-	ft::node<int> *temp;
+	//ft::node<int> *temp;
 	tree.insert(10);
 	// std::cout << "balance " << tree.get_balance(tree._tree) << std::endl;
 	// std::cout << "node : " << tree._tree->data << std::endl;
@@ -116,6 +117,17 @@ int main()
 	tree.insert(-1);
 
 	ft::avl_tree<int>::iterator iter = tree.begin();
+	std::map<char,int> mymap;
 
-	std::cout << *iter << std::endl;
+  	mymap['a'] = 100;
+  	mymap['b'] = 200;
+  	mymap['c'] = 300;
+	mymap['d'] = 400;
+  	mymap['e'] = 500;
+  	mymap['f'] = 600;
+	mymap['g'] = 700;
+  	mymap['h'] = 800;
+  	mymap['i'] = 900;
+	 for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
 }
