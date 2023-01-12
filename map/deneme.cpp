@@ -114,27 +114,34 @@ int main()
 	// std::cout << "----------------------------\n";
 	tree.insert(13);
 	tree.insert(14);
-	tree.insert(1);
-	tree.insert(0);
-	tree.insert(-1);
-	tree.insert(-2);
-	tree.insert(-3);
-	std::cout << "node : " << tree._tree->data << std::endl;
+	tree.insert(9);
+	tree.insert(8);
+	tree.insert(7);
+	tree.insert(6);
+	tree.insert(5);
+	std::cout << "node : " << tree._tree->data << " node parent " << tree._tree->parent_node << std::endl;
 	temp = tree._tree;
 	print_tree(temp->left_node, "left");
 	print_tree(temp->right_node, "right");
 	std::cout << "----------------------------\n";
 	ft::avl_tree<int>::iterator iter = tree.begin();
-	std::cout << *iter << std::endl;
-	iter++;
-	std::cout << *iter << std::endl;
-	iter++;
-	std::cout << *iter << std::endl;
-	iter++;
-	std::cout << *iter << std::endl;
-	// iter++;
-	// std::cout << *iter << std::endl;
-	std::map<char,int> mymap;
+	while (iter != tree.end())
+	{
+		std::cout << "iter "<<*iter << std::endl;
+		iter++;
+	}
+	std::cout << "----------------------------\n";
+	// ft::avl_tree<int>::iterator iter1 = tree.begin();
+	// //std::cout<< *iter << std::endl;
+	// iter--;
+	// while (iter != iter1)
+	// {
+	// 	std::cout<< *iter << std::endl;
+	// 	iter--;
+	// }
+	
+	
+	// std::map<char,int> mymap;
 
   	// mymap['a'] = 100;
   	// mymap['b'] = 200;
@@ -145,6 +152,8 @@ int main()
 	// mymap['g'] = 700;
   	// mymap['h'] = 800;
   	// mymap['i'] = 900;
+	// std::map<char,int>::iterator it = mymap.end();
+	// printf("%d\n",  mymap.end());
 	//  for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
     // std::cout << it->first << " => " << it->second << '\n';
 }

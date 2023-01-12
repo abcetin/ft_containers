@@ -15,7 +15,7 @@ namespace ft
 				typedef T							value_type;
 				typedef const ft::tree_iterator<T>	const_iterator;
 				typedef ft::tree_iterator<T>		iterator; // const_iterator yap sonra
-				typedef const_iterator				const_reverse_iterator; //hepsinin const olmasının sebebi ağaçta verilerin yeniden atanmasını istemiyoruz.
+				typedef iterator					const_reverse_iterator; //hepsinin const olmasının sebebi ağaçta verilerin yeniden atanmasını istemiyoruz.
 				typedef const_iterator				reverse_iterator;		//avl_ağaç yapısını bozabileceği için eğer atama iterator ile yapılırsa hatalı çalışmalara sebep olabilir.
 
 			private:
@@ -25,6 +25,8 @@ namespace ft
 				node<T> *y = x->right_node;
 				node<T> *z = y->left_node;
 
+				if (x)
+					y->parent_node = x->parent_node;
 				y->left_node = x;
 				x->right_node = z;
 				if (x)
@@ -41,6 +43,8 @@ namespace ft
 				node<T> *y = x->left_node;
 				node<T> *z = y->right_node;
 
+				if (x)
+					y->parent_node = x->parent_node;
 				y->right_node = x;
 				x->left_node = z;
 				if (x)
@@ -73,7 +77,7 @@ namespace ft
 						}
 						else
 							_node = temp;
-						free(temp);
+						free(temp); //deallocate yap unutma
 						return _node;
 					}
 					else
@@ -143,12 +147,12 @@ namespace ft
 				return _node->height;
 			}
 		public:
-			avl_tree(): _tree(), _start(), _end() {}
+			avl_tree(): _tree(), _start(){_end = new node<T>(0);}
 
 			void insert(const T& _value)
 			{	
 				this->_tree = add_with_balance(this->_tree, _value, this->_tree);
-				this->_start = this->_tree;
+				// this->_end->parent_node = max;
 			}
 
 			int get_balance(node<T> *_node)
@@ -174,27 +178,27 @@ namespace ft
 			void _delete_node(const T& _value)
 			{
 				this->_tree = delete_node(this->_tree, _value);
-				this->_start = this->_tree->_minimum(this->_tree->right_node);
 			}
 
 			const_iterator begin() const
 			{
-				return const_iterator(this->_start);
+				return const_iterator(this->_tree->_minimum(_tree));
 			}
 
 			iterator begin()
 			{
-				return iterator(this->_start);
+				return iterator(this->_tree->_minimum(_tree));
 			}
 
 			const_iterator end() const //end nullptr döndürür
 			{
-				return const_iterator(nullptr);
+				
+				return const_iterator(this->_tree);
 			}
 
 			iterator end() //end nullptr döndürür
 			{
-				return iterator(nullptr);
+				return iterator(this->_end);
 			}
 
 			~avl_tree()

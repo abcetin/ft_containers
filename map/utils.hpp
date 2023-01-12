@@ -19,6 +19,14 @@ namespace ft
 		node<T> *right_node;
 		node<T>	*parent_node;
 
+		node()
+		{
+			data = 0;
+			height = 0;
+			left_node = NULL;
+			right_node = NULL;
+			parent_node = NULL;
+		}
 		node(const T &_value, node<T> *left = NULL, node<T> *right = NULL, node<T>* parent = NULL)
 			: data(_value), height(1), left_node(left), right_node(right), parent_node(parent) {}
 
@@ -73,36 +81,77 @@ namespace ft
 			return _temp;
 		}
 
-		node<_Tp> *tree_increment(node<_Tp>* _x)
+		_Self& operator--()
 		{
-			if (_x->right_node)
-				_x = _x->_minimum(_x->right_node);
-			else
-			{
-				node<_Tp>* _y = _x->parent_node;
-				printf("y : %d y.r : %d x : %d\n", _y->data, _y->right_node->data, _x->data);
-				while(_y && _x == _y->right_node)
-				{
-					printf("aa %d\n", _y->data);
-					_x = _y;
-					_y = _y->parent_node;
-				}
-				if (_x->right_node != _y)
-				{
-					printf("aa\n");
-					_x = _y;
-				}
-			}
-			return _x;
+			_M_node = tree_decrement(_M_node);
+			return *this;
 		}
 
-	 	const node<_Tp> *tree_increment(const node<_Tp>* _x)
+		_Self operator--(int)
 		{
-			node<_Tp>* _tmp = unconst(_x);
-			return tree_increment(_tmp);
+			tree_iterator _temp = *this;
+			_M_node = tree_decrement(_M_node);
+			return _temp;
 		}
 
+		bool operator!=(const _Self &_x)
+		{
+			return _x._M_node != _M_node;
+		}
+
+		bool operator==(const _Self &_x)
+		{
+			return _x._M_node == _M_node;
+		}
 	};
+
+	template <typename _Tp>
+	node<_Tp> *tree_increment(node<_Tp>* _x)
+	{
+		if (_x->right_node)
+			_x = _x->_minimum(_x->right_node);
+		else
+		{
+			node<_Tp>* _y = _x->parent_node;
+			while(_y &&_x == _y->right_node)
+			{
+				_x = _y;
+				_y = _y->parent_node;
+			}
+			if (_x->right_node != _y)
+				_x = _y;
+		}
+		return _x;
+	}
+
+	template <typename _Tp>
+	const node<_Tp> *tree_increment(const node<_Tp>* _x)
+	{
+		return tree_increment(const_cast<node<_Tp>* >(_x));
+	}
+
+	template<typename _Tp>
+	node<_Tp> *tree_decrement(node<_Tp>* _x)
+	{
+		node<_Tp>* _y;
+
+		if (!_x && _x->parent_node->parent_node == _x)
+		 	_x = _x->right_node;
+		else if (_x->left_node)
+			_x = _x->_maxmimum(_x->left_node);
+		else
+		{
+			_y = _x->parent_node;
+			while (_x == _y->left_node)
+			{
+				_x = _y;
+				_y = _y->parent_node;
+			}
+			_x = _y;
+		}
+		return _x;
+	}
+
 }
 
 #endif
