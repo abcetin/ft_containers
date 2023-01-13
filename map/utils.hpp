@@ -1,12 +1,13 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include <iostream>
-#include "avl_tree.hpp"
+#include "tree/avl_tree.hpp"
 #include "../utils/iterator_traits.hpp"
+#include <iostream>
 
 namespace ft
 {
+
 	template <typename T>
 	struct node
 	{
@@ -15,13 +16,13 @@ namespace ft
 
 		T data;
 		int height;
-		node<T> *left_node;
-		node<T> *right_node;
-		node<T>	*parent_node;
+		_Base_ptr left_node;
+		_Base_ptr right_node;
+		_Base_ptr parent_node;
 
 		node(){data = NULL;}
 
-		node(const T &_value, node<T> *left = NULL, node<T> *right = NULL, node<T>* parent = NULL)
+		node(const T &_value, _Base_ptr left = NULL, _Base_ptr right = NULL, _Base_ptr parent = NULL)
 			: data(_value), height(1), left_node(left), right_node(right), parent_node(parent) {}
 
 		_Base_ptr _minimum(_Base_ptr _x)
@@ -36,66 +37,6 @@ namespace ft
 			if (!_x || !_x->right_node)
 				return _x;
 			return _maxmimum(_x->right_node);
-		}
-	};
-
-	template <typename _Tp>
-	struct tree_iterator
-	{
-		typedef _Tp		value_type;
-		typedef _Tp&	reference;
-		typedef _Tp*	pointer;
-
-		typedef std::ptrdiff_t 						difference_type;
-		typedef std::bidirectional_iterator_tag		iterator_category;
-
-		typedef tree_iterator<_Tp>				_Self;
-		typedef typename node<_Tp>::_Base_ptr	_Base_ptr;
-
-		_Base_ptr	_M_node;
-
-		tree_iterator(): _M_node(_Tp()) {}
-
-		explicit tree_iterator(const _Base_ptr _x) : _M_node(_x) {}
-
-		reference operator*() const { return _M_node->data; }
-
-		pointer operator->() const { return &_M_node->data; }
-
-		_Self& operator++()
-		{
-			_M_node = tree_increment(_M_node);
-			return *this;
-		}
-
-		_Self operator++(int)
-		{
-			tree_iterator _temp = *this;
-			_M_node = tree_increment(_M_node);
-			return _temp;
-		}
-
-		_Self& operator--()
-		{
-			_M_node = tree_decrement(_M_node);
-			return *this;
-		}
-
-		_Self operator--(int)
-		{
-			tree_iterator _temp = *this;
-			_M_node = tree_decrement(_M_node);
-			return _temp;
-		}
-
-		bool operator!=(const _Self &_x)
-		{
-			return _x._M_node != _M_node;
-		}
-
-		bool operator==(const _Self &_x)
-		{
-			return _x._M_node == _M_node;
 		}
 	};
 
@@ -144,6 +85,12 @@ namespace ft
 			_x = _y;
 		}
 		return _x;
+	}
+
+	template <typename _Tp>
+	const node<_Tp> *tree_decrement(const node<_Tp>* _x)
+	{
+		return tree_decrement(const_cast<node<_Tp>* >(_x));
 	}
 
 }

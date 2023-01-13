@@ -3,7 +3,7 @@
 
 #include "utils.h"
 #include "iterator_traits.hpp"
-//#include "enable_if.hpp"
+#include "enable_if.hpp"
 
 namespace ft
 {
@@ -30,7 +30,7 @@ namespace ft
 			// Yineleyicinin const_iterator olmasına izin verir
 			template<typename _Iter> 
 			normal_iterator(const normal_iterator<_Iter,
-			typename  __gnu_cxx::__enable_if<(std::__are_same<_Iter, typename _Container::pointer>::__value),
+			typename  ft::enable_if<(std::__are_same<_Iter, typename _Container::pointer>::__value),
             _Container>::__type>& _i) : _current(_i.base()){}
 
 			reference operator*() const {return *_current;}

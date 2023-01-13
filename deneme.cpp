@@ -39,5 +39,4 @@ int main()
 	b.assign(77, '2');
 	std::cout << a.size() <<" "<< a.capacity() << std::endl;
 	std::cout << b.size() << " " << b.capacity()<< std::endl;
-
 }

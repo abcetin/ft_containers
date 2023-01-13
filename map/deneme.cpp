@@ -1,4 +1,4 @@
-#include "avl_tree.hpp"
+#include "tree/avl_tree.hpp"
 #include <map>
 
 void print_tree(ft::node<int> *avl, std::string str)
@@ -119,11 +119,12 @@ int main()
 	tree.insert(7);
 	tree.insert(6);
 	tree.insert(5);
-	std::cout << "node : " << tree._tree->data << " node parent " << tree._tree->parent_node << std::endl;
+	std::cout << "node : " << tree._tree->data << " node parent " << tree._tree->parent_node->data << std::endl;
 	temp = tree._tree;
 	print_tree(temp->left_node, "left");
 	print_tree(temp->right_node, "right");
 	std::cout << "----------------------------\n";
+	tree.delete_node(5);
 	ft::avl_tree<int>::iterator iter = tree.begin();
 	while (iter != tree.end())
 	{
@@ -131,29 +132,29 @@ int main()
 		iter++;
 	}
 	std::cout << "----------------------------\n";
-	// ft::avl_tree<int>::iterator iter1 = tree.begin();
-	// //std::cout<< *iter << std::endl;
+	ft::avl_tree<int>::iterator iter1 = tree.begin();
+	// std::cout<< *iter << std::endl;
 	// iter--;
-	// while (iter != iter1)
-	// {
-	// 	std::cout<< *iter << std::endl;
-	// 	iter--;
-	// }
+	while (iter != iter1)
+	{
+		std::cout<< *iter << std::endl;
+		iter--;
+	}
 	
 	
-	// std::map<char,int> mymap;
+	std::map<char,int> mymap;
 
-  	// mymap['a'] = 100;
-  	// mymap['b'] = 200;
-  	// mymap['c'] = 300;
-	// mymap['d'] = 400;
-  	// mymap['e'] = 500;
-  	// mymap['f'] = 600;
-	// mymap['g'] = 700;
-  	// mymap['h'] = 800;
-  	// mymap['i'] = 900;
-	// std::map<char,int>::iterator it = mymap.end();
-	// printf("%d\n",  mymap.end());
-	//  for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+  	mymap['a'] = 100;
+  	mymap['b'] = 200;
+  	mymap['c'] = 300;
+	mymap['d'] = 400;
+  	mymap['e'] = 500;
+  	mymap['f'] = 600;
+	mymap['g'] = 700;
+  	mymap['h'] = 800;
+  	mymap['i'] = 900;
+	for (std::map<char,int>::iterator it=mymap.end(); it!=mymap.begin(); --it)
+    std::cout << it->first << " => " << it->second << '\n';
+	//  for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
     // std::cout << it->first << " => " << it->second << '\n';
 }
