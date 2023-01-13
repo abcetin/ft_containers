@@ -127,7 +127,7 @@ int main()
 	ft::avl_tree<int>::iterator iter = tree.begin();
 	while (iter != tree.end())
 	{
-		std::cout << "iter "<<*iter << std::endl;
+		std::cout << "iter "<< *iter << std::endl;
 		iter++;
 	}
 	std::cout << "----------------------------\n";

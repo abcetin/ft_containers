@@ -19,14 +19,8 @@ namespace ft
 		node<T> *right_node;
 		node<T>	*parent_node;
 
-		node()
-		{
-			data = 0;
-			height = 0;
-			left_node = NULL;
-			right_node = NULL;
-			parent_node = NULL;
-		}
+		node(){data = NULL;}
+
 		node(const T &_value, node<T> *left = NULL, node<T> *right = NULL, node<T>* parent = NULL)
 			: data(_value), height(1), left_node(left), right_node(right), parent_node(parent) {}
 

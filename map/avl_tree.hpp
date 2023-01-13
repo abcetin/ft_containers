@@ -5,6 +5,7 @@
 
 namespace ft
 {
+	//new leri allocator olarak güncelle!!!!!!!!!!!!!
 	template <typename T> class avl_tree
 	{	
 			public:
@@ -147,12 +148,12 @@ namespace ft
 				return _node->height;
 			}
 		public:
-			avl_tree(): _tree(), _start(){_end = new node<T>(0);}
+			avl_tree(): _tree(), _start(){ this->_end = NULL; }
 
 			void insert(const T& _value)
 			{	
 				this->_tree = add_with_balance(this->_tree, _value, this->_tree);
-				// this->_end->parent_node = max;
+				//this->_end->parent_node = _tree->_maxmimum(_tree);
 			}
 
 			int get_balance(node<T> *_node)
@@ -193,7 +194,7 @@ namespace ft
 			const_iterator end() const //end nullptr döndürür
 			{
 				
-				return const_iterator(this->_tree);
+				return const_iterator(this->_end);
 			}
 
 			iterator end() //end nullptr döndürür
