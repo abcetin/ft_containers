@@ -3,6 +3,7 @@
 
 #include "../utils/utils.h"
 #include "../utils/pair.hpp"
+#include "tree/avl_tree.hpp"
 
 namespace ft
 {
@@ -21,7 +22,10 @@ namespace ft
 		//typedef typename std::ptrdiff_t	difference_type;
 
 		private:
-			typedef typename Allocator::value_type	allocator_value_type;
+			typedef typename Allocator::value_type				allocator_value_type;
+			typedef avl_tree<value_type, key_compare, allocator_type>		_Rep_type;
+
+			_Rep_type _M_t;
 
 		public:
 			class value_compare : public std::binary_function<value_type, value_type, bool>
@@ -31,7 +35,7 @@ namespace ft
 				protected:
 					Compare _comp;
 
-					value_compare(Compare _c) : _comp(c){}
+					value_compare(Compare _c) : _comp(_c){}
 
 				public:
 					bool operator()(const value_type& _x, const value_type& _y) const
@@ -39,10 +43,40 @@ namespace ft
 						return _comp(_x.first, _y.first);
 					}
 			};
-		
-		private:
-			typedef typename Allocator::template rebind<value_type>::other _pair_alloc_type;
-			// typedef _Rb_tree
+
+			typedef typename allocator_type::pointer			pointer;
+			typedef typename allocator_type::const_pointer		const_pointer;
+			typedef typename allocator_type::reference			reference;
+			typedef typename allocator_type::const_reference	const_reference;
+			typedef typename _Rep_type::_Base_ptr				_Base_ptr;
+			typedef typename _Rep_type::iterator				iterator;
+			typedef typename _Rep_type::const_iterator			const_iterator;
+			typedef typename _Rep_type::size_type				size_type;
+			typedef typename _Rep_type::difference_type			difference_type;
+			typedef typename _Rep_type::reverse_iterator		reverse_iterator;
+			typedef typename _Rep_type::const_reverse_iterator	const_reverse_iterator;
+
+			bool operator()(const value_type& _x, const value_type& _y){ return key_compare(_x.first, _y.first); }
+
+			map() : _M_t() {}
+
+			explicit map(const Compare& comp, const Allocator& alloc=Allocator()) : _M_t(comp, alloc) {}
+
+			// template <typename _InputIterator>
+			// explicit map(_InputIterator first, _InputIterator last, const Compare _comp, const allocator_type& _a = allocator_type() ) : _M_t(_comp, _a)
+			// {
+			// 	if (key_compare())
+			// }
+
+			std::pair<iterator, bool>
+			insert( const value_type& value )
+			{
+				iterator ret = iterator(_M_t.search(this->_M_t._tree, value));
+				if (ret == _M_t.end())
+					return  std::pair<iterator, bool>(ret, false);
+				return std::pair<iterator, bool>(iterator(_M_t.insert(value)), true);
+			}
+
 	};
 };
 
