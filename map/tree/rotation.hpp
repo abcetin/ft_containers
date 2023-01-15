@@ -8,11 +8,12 @@
 namespace ft
 {
 
-	template <typename T>
-	node<T> *RR(node<T> *x)
+	template <typename _Base_ptr>
+	_Base_ptr RR(_Base_ptr x)
 	{
-		node<T> *y = x->right_node;
-		node<T> *z = y->left_node;
+		std::cout << "rr\n";
+		_Base_ptr y = x->right_node;
+		_Base_ptr z = y->left_node;
 		if (x)
 			y->parent_node = x->parent_node;
 		y->left_node = x;
@@ -26,11 +27,12 @@ namespace ft
 		return y;
 	}
 
-	template <typename T>
-	node<T> *LL(node<T> *x)
+	template <typename _Base_ptr>
+	_Base_ptr LL(_Base_ptr x)
 	{
-		node<T> *y = x->left_node;
-		node<T> *z = y->right_node;
+		std::cout << "ll\n";
+		_Base_ptr y = x->left_node;
+		_Base_ptr z = y->right_node;
 		if (x)
 			y->parent_node = x->parent_node;
 		y->right_node = x;

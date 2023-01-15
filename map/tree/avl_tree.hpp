@@ -34,20 +34,20 @@ namespace ft
 		
 		protected:
 
-		_Base_ptr create_node(value_type _value)
-		{
-			_Base_ptr ret = this->_allocator.allocate(1);
-			this->_allocator.construct(ret, _value);
-			return ret;
-		}
+		// _Base_ptr create_node(value_type _value)
+		// {
+		// 	_Base_ptr ret = this->_allocator.allocate(1);
+		// 	this->_allocator.construct(ret, _value);
+		// 	return ret;
+		// }
 
 		public:
 
-			avl_tree(): _tree(), _count(0) { this->_end = create_node(_Val());}
+			avl_tree(): _tree(), _count(0) { create_node(&this->_end, _Val(), _allocator);}
 
-			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _key_compare(_comp), _allocator(_a)
+			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _key_compare(_comp), _allocator(_a), _count(0)
 			{
-				this->_end = create_node(0);
+				create_node(&this->_end, _Val(), _allocator);
 				this->_tree = this->_end;
 			}
 
@@ -61,18 +61,23 @@ namespace ft
 				}
 			}
 
-			node<_Val> *insert(const _Val& _value)
+			_Base_ptr insert(const _Val& _value)
 			{
-				node<_Val> *ret = create_node(_value);
-				this->_tree = add_with_balance(this->_tree, _value, this->_tree);
-				_Base_ptr max = _tree->_maxmimum(_tree);
-				this->_tree->parent_node = this->_end;
-				this->_end->parent_node = max;
-				this->_count++;
+				_Base_ptr ret = search(this->_tree, _value);
+				if (!ret)
+				{
+					std::cout << "insert "<< _value.first << std::endl;
+					this->_tree = _add_with_balance(this->_tree, _value, this->_tree, _key_compare, _allocator);
+					_Base_ptr max = _tree->_maxmimum(_tree);
+					this->_tree->parent_node = this->_end;
+					this->_end->parent_node = max;
+					this->_count++;
+					ret = search(this->_tree, _value);
+				}
 				return ret;
 			}
 			
-			_Base_ptr search(_Base_ptr _node, const _Val& _value)
+			_Base_ptr search(_Base_ptr _node, _Val _value)
 			{
 				if (!_node)
 					return _node;
@@ -85,15 +90,9 @@ namespace ft
 				return _node;
 			}
 
-			int get_balance()
-			{
-				return _get_balance(this->_tree);
-			}
+			int get_balance() { return _get_balance(this->_tree); }
 
-			void delete_node(const _Val& _value)
-			{
-				this->_tree = _delete_node(this->_tree, _value);
-			}
+			void delete_node(const _Val& _value) { this->_tree = _delete_node(this->_tree, _value, _allocator); }
 
 			allocator_type get_allocator() { return this->_allocator; }
 
@@ -126,24 +125,6 @@ namespace ft
 				// 	_delete_node(_tree->data);
 				// }
 			}
-
-			private:
-				_Base_ptr add_with_balance(_Base_ptr _node, const  value_type&_value, _Base_ptr parent)
-				{
-					if (_node && !_key_compare(_node->data.first, _value.first))
-						return _node;
-					else if (!_node)
-						return create_node(_value);
-					else if (_value < _node->data)
-						_node->left_node = add_with_balance(_node->left_node, _value, _node);
-					else if (_value >= _node->data)
-						_node->right_node = add_with_balance(_node->right_node, _value, _node);
-					else
-						return _node;
-					_node->height = 1 + std::max(height(_node->left_node), height(_node->right_node));
-					_node = balance(_node);
-					return _node;
-				}
 	};
 };
 

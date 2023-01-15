@@ -8,7 +8,7 @@
 namespace ft
 {
 	template < typename Key, typename T, typename Compare = std::less<Key>,
-		typename Allocator = std::allocator<ft::pair<const Key, T>>>
+		typename Allocator = std::allocator<ft::pair<const Key, T> > >
 	class map
 	{
 		public:
@@ -71,9 +71,9 @@ namespace ft
 			std::pair<iterator, bool>
 			insert( const value_type& value )
 			{
-				iterator ret = iterator(_M_t.search(this->_M_t._tree, value));
-				if (ret == _M_t.end())
-					return  std::pair<iterator, bool>(ret, false);
+				_Base_ptr ret = _M_t.search(this->_M_t._tree, value);
+				if (ret)
+					return  std::pair<iterator, bool>(iterator(ret), false);
 				return std::pair<iterator, bool>(iterator(_M_t.insert(value)), true);
 			}
 

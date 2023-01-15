@@ -5,24 +5,24 @@
 
 namespace ft
 {
-	template <typename T>
-	int height(node<T> *_node)
+	template <typename _Base_ptr>
+	int height(_Base_ptr _node)
 	{
 		if (_node == NULL)
 			return 0;
 		return _node->height;
 	}
 
-	template <typename T>
-	int _get_balance(node<T> *_node)
+	template <typename _Base_ptr>
+	int _get_balance(_Base_ptr _node)
 	{
 		if (!_node)
 			return 0;
 		return (height(_node->left_node) - height(_node->right_node));
 	}
 
-	template <typename T>
-	node<T> *balance(node<T> *_node)
+	template <typename _Base_ptr>
+	_Base_ptr balance(_Base_ptr _node)
 	{
 		int balance = _get_balance(_node);
 		int right_balance = _get_balance(_node->right_node);

@@ -5,14 +5,37 @@
 #include "tree_utils.hpp"
 namespace ft
 {
-
-	//template <typename T, typename _Compare = std::less<T>, typename _Allocator = std::allocator<T> >
-	
-
-	template <typename T, typename _Allocator = std::allocator<T>>
-	node<T> *_delete_node(node<T> *_node, const T &_value, const _Allocator _alloc = _Allocator())
+	template <typename _Base_ptr, typename _Value, typename _Alloc>
+	void create_node(_Base_ptr *_node, _Value _value, _Alloc _allocator)
 	{
-		node<T> *temp;
+		*_node = _allocator.allocate(1);
+		_allocator.construct(*_node, _value);
+	}
+
+	template <typename _Base_ptr, typename _Value, typename _Compare, typename _Alloc>
+	_Base_ptr _add_with_balance(_Base_ptr _node, const _Value &_value, _Base_ptr parent, _Compare _comp, _Alloc _allocator)
+	{
+		if (!_node)
+		{
+			create_node(&_node, _value, _allocator);
+			_node->parent_node = parent;
+			return _node;
+		}
+		else if (_value.first < _node->data.first)
+			_node->left_node = _add_with_balance(_node->left_node, _value, _node, _comp, _allocator);
+		else if (_value.first >= _node->data.first)
+			_node->right_node = _add_with_balance(_node->right_node, _value, _node, _comp, _allocator);
+		else
+			return _node;
+		_node->height = 1 + std::max(height(_node->left_node), height(_node->right_node));
+		_node = balance(_node);
+		return _node;
+	}
+
+	template <typename _Base_ptr, typename _Val, typename _Alloc>
+	_Base_ptr _delete_node(_Base_ptr _node, const _Val &_value, _Alloc _alloc)
+	{
+		_Base_ptr *temp;
 		if (!_node)
 			return _node;
 		if (_value > _node->data)
@@ -33,7 +56,7 @@ namespace ft
 					_node = temp;
 				_alloc.destroy(temp);
 				_alloc.deallocate(temp, 1);
-				//free(temp); // deallocate yap unutma
+				// free(temp); // deallocate yap unutma
 				return _node;
 			}
 			else
@@ -48,8 +71,8 @@ namespace ft
 		return _node;
 	}
 
-	template<typename _Val, typename _Alloc = std::allocator<_Val> >
-	node<_Val> *_copy(node<_Val>* tree, node<_Val> *first, const _Alloc _alloc = _Alloc())
+	template <typename _Base_ptr, typename _Val, typename _Alloc>
+	_Base_ptr _copy(_Base_ptr tree, _Base_ptr first, _Alloc _alloc)
 	{
 		if (first)
 		{
