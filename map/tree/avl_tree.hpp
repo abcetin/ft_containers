@@ -31,33 +31,24 @@ namespace ft
 			size_type		_count;
 			_Compare		_key_compare;
 			allocator_type	_allocator;
-		
-		protected:
-
-		// _Base_ptr create_node(value_type _value)
-		// {
-		// 	_Base_ptr ret = this->_allocator.allocate(1);
-		// 	this->_allocator.construct(ret, _value);
-		// 	return ret;
-		// }
 
 		public:
 
 			avl_tree(): _tree(), _count(0) { create_node(&this->_end, _Val(), _allocator);}
 
-			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _key_compare(_comp), _allocator(_a), _count(0)
+			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _tree(), _key_compare(_comp), _allocator(_a), _count(0)
 			{
 				create_node(&this->_end, _Val(), _allocator);
-				this->_tree = this->_end;
+				this->_tree->parent_node = this->_end;
 			}
 
-			avl_tree (const avl_tree& _x) : _key_compare(_x._key_compare), _allocator(_x._get_allocator())
+			avl_tree (const avl_tree& _x) : _key_compare(_x._key_compare), _allocator(_x._allocator), _count(_x._count)
 			{
 				if (_x._tree)
 				{
-					this->_tree = _copy(_x._tree, _x.begin(), _x.end());
-					this->_end = _x._end;
-					this->_count = _x.size();
+					this->_tree = _copy(this->_tree, _x._tree, this->_end, _allocator);
+					//this->_end = _x._end;
+					//this->_count = _x.size();
 				}
 			}
 
@@ -66,8 +57,7 @@ namespace ft
 				_Base_ptr ret = search(this->_tree, _value);
 				if (!ret)
 				{
-					std::cout << "insert "<< _value.first << std::endl;
-					this->_tree = _add_with_balance(this->_tree, _value, this->_tree, _key_compare, _allocator);
+					this->_tree = _add_with_balance(this->_tree, _value, this->_tree, _allocator);
 					_Base_ptr max = _tree->_maxmimum(_tree);
 					this->_tree->parent_node = this->_end;
 					this->_end->parent_node = max;
@@ -81,9 +71,9 @@ namespace ft
 			{
 				if (!_node)
 					return _node;
-				if (_value.first == _node->data.first)
+				else if (_value.first == _node->data.first)
 					return _node;
-				if (_value.first >= _node->data.first)
+				else if (_value.first > _node->data.first)
 					_node = search(_node->right_node, _value);
 				else if (_value.first < _node->data.first)
 					_node = search(_node->left_node, _value);

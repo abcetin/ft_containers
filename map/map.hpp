@@ -17,14 +17,11 @@ namespace ft
 			typedef ft::pair<const Key, T>			value_type;
 			typedef Compare							key_compare;
 			typedef Allocator						allocator_type;
-		
-		//typedef typename std::size_t	size_type;
-		//typedef typename std::ptrdiff_t	difference_type;
 
 		private:
 			typedef typename Allocator::value_type				allocator_value_type;
 			typedef avl_tree<value_type, key_compare, allocator_type>		_Rep_type;
-
+		public:
 			_Rep_type _M_t;
 
 		public:
@@ -60,13 +57,19 @@ namespace ft
 
 			map() : _M_t() {}
 
+			map( const map& other) : _M_t(other._M_t) {}
+
 			explicit map(const Compare& comp, const Allocator& alloc=Allocator()) : _M_t(comp, alloc) {}
 
-			// template <typename _InputIterator>
-			// explicit map(_InputIterator first, _InputIterator last, const Compare _comp, const allocator_type& _a = allocator_type() ) : _M_t(_comp, _a)
-			// {
-			// 	if (key_compare())
-			// }
+			template <typename _InputIterator>
+			explicit map(_InputIterator first, _InputIterator last, const Compare _comp = Compare(), const allocator_type& _a = allocator_type() ) : _M_t(_comp, _a)
+			{
+				while(first != last)
+				{
+					_M_t.insert(first._M_node->data);
+					first++;
+				}
+			}
 
 			std::pair<iterator, bool>
 			insert( const value_type& value )
@@ -77,6 +80,24 @@ namespace ft
 				return std::pair<iterator, bool>(iterator(_M_t.insert(value)), true);
 			}
 
+			map& operator=( const map& other )
+			{
+				_M_t = other._M_t;
+				return *this;
+			}
+			allocator_type get_allocator() const { return _M_t.get_allocator(); }
+
+			mapped_type& at( const key_type& key ) 
+			{ 
+				iterator i = iterator(lower_bound(_M_t._tree, key));
+				if (i == end() || key_compare()(key, (*i).first))
+					throw std::out_of_range(("map::at:	key not found"));
+				return i->second;
+			}
+
+			iterator begin() { return _M_t.begin(); }
+
+			iterator end() { return _M_t.end(); }			
 	};
 };
 

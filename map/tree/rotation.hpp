@@ -11,7 +11,6 @@ namespace ft
 	template <typename _Base_ptr>
 	_Base_ptr RR(_Base_ptr x)
 	{
-		std::cout << "rr\n";
 		_Base_ptr y = x->right_node;
 		_Base_ptr z = y->left_node;
 		if (x)
@@ -30,7 +29,6 @@ namespace ft
 	template <typename _Base_ptr>
 	_Base_ptr LL(_Base_ptr x)
 	{
-		std::cout << "ll\n";
 		_Base_ptr y = x->left_node;
 		_Base_ptr z = y->right_node;
 		if (x)

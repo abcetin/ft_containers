@@ -18,13 +18,13 @@ namespace ft
         	typedef typename std::size_t									size_type;// size_type => Unsigned integer type (usually std::size_t)
         	typedef typename std::ptrdiff_t									difference_type;// difference_type	Signed integer type (usually std::ptrdiff_t)
         	typedef typename allocator_type::reference						reference;// reference	value_type&
-        	typedef typename allocator_type::const_reference		const_reference;// const_reference	const value_type&
-			typedef	typename allocator_type::pointer				pointer;
-			typedef typename allocator_type::const_pointer			const_pointer;
-			typedef ft::normal_iterator<pointer, vector>			iterator;
-			typedef ft::normal_iterator<const_pointer, vector>		const_iterator;	
-			typedef ft::reverse_iterator<iterator>					reverse_iterator;//reverse_iterator	std::reverse_iterator<iterator>
-			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;//const_reverse_iterator	std::reverse_iterator<const_iterator>
+        	typedef typename allocator_type::const_reference				const_reference;// const_reference	const value_type&
+			typedef	typename allocator_type::pointer						pointer;
+			typedef typename allocator_type::const_pointer					const_pointer;
+			typedef ft::normal_iterator<pointer, vector>					iterator;
+			typedef ft::normal_iterator<const_pointer, vector>				const_iterator;	
+			typedef ft::reverse_iterator<iterator>							reverse_iterator;//reverse_iterator	std::reverse_iterator<iterator>
+			typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;//const_reverse_iterator	std::reverse_iterator<const_iterator>
 		
 		protected:
 			allocator_type	_allocator_type;
@@ -100,7 +100,6 @@ namespace ft
 					this->_allocator_type.construct(this->_finish, other[i]);
 					this->_finish++;
 				}
-				
 			}
 			
 			template<typename InputIt> vector(InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!is_integral<InputIt>::value, bool>::type = true) :

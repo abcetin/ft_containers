@@ -14,7 +14,7 @@ namespace ft
 
 		template< typename _Tp, typename _vector >
 		friend bool operator<( const ft::stack<_Tp,_vector>& lhs, const ft::stack<_Tp,_vector>& rhs );
-        // ----------------------Member Types---------------------//
+
 		public:
         	typedef Container							container_type;
         	typedef typename Container::value_type		value_type;
@@ -26,6 +26,8 @@ namespace ft
 			Container c;
 		
 		public:
+			stack(const Container& _c) : c(_c) {}
+
 			explicit stack(const Container& __c = Container()): c(__c){}
 
 			~stack(){}

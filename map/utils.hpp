@@ -40,14 +40,14 @@ namespace ft
 		}
 	};
 
-	template <typename _Tp>
-	node<_Tp> *tree_increment(node<_Tp>* _x)
+	template <typename _Base_ptr>
+	_Base_ptr tree_increment(_Base_ptr _x)
 	{
 		if (_x->right_node)
 			_x = _x->_minimum(_x->right_node);
 		else
 		{
-			node<_Tp>* _y = _x->parent_node;
+			_Base_ptr _y = _x->parent_node;
 			while(_y &&_x == _y->right_node)
 			{
 				_x = _y;

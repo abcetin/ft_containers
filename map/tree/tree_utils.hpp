@@ -45,6 +45,24 @@ namespace ft
 		}
 		return _node;
 	}
+
+	template <typename _Base_ptr, typename _Val>
+	_Base_ptr lower_bound(_Base_ptr _node, const _Val& key)
+	{
+		_Base_ptr ret;
+		while (_node)
+		{
+			if (key <= _node->data.first)
+			{
+				ret = _node;
+				_node = _node->left_node;
+			}
+			else
+				_node = _node->right_node;
+		}
+		return ret;
+	}
+
 };
 
 #endif

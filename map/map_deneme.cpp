@@ -146,34 +146,48 @@ int main()
 	std::map<char,int> mymap;
 	std::map<char,int> mymap2;
 	ft::map<char, int> tmp;
-	typedef typename ft::pair<char,int> pr;
+	typedef ft::pair<char,int> pr;
 	tmp.insert(ft::pair<char, int>('c', 100));
 	tmp.insert(ft::pair<char, int>('b', 200));
 	tmp.insert(ft::pair<char, int>('a', 300));
 	tmp.insert(ft::pair<char, int>('d', 400));
-	
-	
-  	mymap['a'] = 100;
+	tmp.insert(ft::pair<char, int>('p', 500));
+	// ft::map<char, int>::iterator end = tmp.end();
+	ft::map<char, int> tmp2;
+	tmp2 = tmp;
+	print_tree(tmp2._M_t._tree, "root");
+	ft::map<char, int>::iterator begin = tmp.begin();
+	for (ft::map<char, int>::iterator it = tmp2.begin(); it != tmp2.end(); it++)
+	{
+		std::cout << it._M_node->data.first << std::endl;
+	}
+	print_tree(tmp2._M_t._tree, "root");
+	std::cout << "-----------------------\n";
+	print_tree(tmp._M_t._tree, "root");
+	std::cout << "at : "<<tmp2.at('f') << std::endl;
+  	mymap['c'] = 100;
   	mymap['b'] = 200;
-  	mymap['c'] = 300;
+  	mymap['a'] = 300;
 	mymap['d'] = 400;
-  	mymap['e'] = 500;
-  	mymap['f'] = 600;
-	mymap['g'] = 700;
-  	mymap['h'] = 800;
-  	mymap2['z'] = 100;
-	mymap2['y'] = 200;
-	mymap2['x'] = 300;
-	mymap2['w'] = 400;
-	mymap2['l'] = 500;
-	std::map<char,int>::iterator it1 = mymap.begin();
-	mymap2.insert(it1, mymap.end());
+	mymap['p'] = 500;
+	std::cout << "at : "<<mymap.at('f') << std::endl;
+  	// // mymap['e'] = 500;
+  	// // mymap['f'] = 600;
+	// // mymap['g'] = 700;
+  	// // mymap['h'] = 800;
+  	// // mymap2['z'] = 100;
+	// // mymap2['y'] = 200;
+	// // mymap2['x'] = 300;
+	// // mymap2['w'] = 400;
+	// // mymap2['l'] = 500;
+	// std::map<char,int>::iterator it1 = mymap.begin();
+	// mymap2.insert(it1, mymap.end());
 
-	// for (std::map<char,int>::iterator it=mymap.end(); it!=mymap.begin(); --it)
-   	// 	std::cout << it->first << " => " << it->second << '\n';
-	 for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
-    	std::cout << it->first << " => " << it->second << '\n';
-	std::cout << "------------------\n";
-	 for (std::map<char,int>::iterator it=mymap2.begin(); it!=mymap2.end(); it++)
-    	std::cout << it->first << " => " << it->second << '\n';
+	// // for (std::map<char,int>::iterator it=mymap.end(); it!=mymap.begin(); --it)
+   	// // 	std::cout << it->first << " => " << it->second << '\n';
+	//  for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
+    // 	std::cout << it->first << " => " << it->second << '\n';
+	// std::cout << "------------------\n";
+	//  for (std::map<char,int>::iterator it=mymap2.begin(); it!=mymap2.end(); it++)
+    // 	std::cout << it->first << " => " << it->second << '\n';
 }
