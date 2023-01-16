@@ -53,8 +53,6 @@ namespace ft
 			typedef typename _Rep_type::reverse_iterator		reverse_iterator;
 			typedef typename _Rep_type::const_reverse_iterator	const_reverse_iterator;
 
-			bool operator()(const value_type& _x, const value_type& _y){ return key_compare(_x.first, _y.first); }
-
 			map() : _M_t() {}
 
 			map( const map& other) : _M_t(other._M_t) {}

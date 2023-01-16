@@ -170,7 +170,8 @@ int main()
   	mymap['a'] = 300;
 	mymap['d'] = 400;
 	mymap['p'] = 500;
-	std::cout << "at : "<<mymap.at('f') << std::endl;
+	
+	//std::cout << "at : "<<mymap.at('f') << std::endl;
   	// // mymap['e'] = 500;
   	// // mymap['f'] = 600;
 	// // mymap['g'] = 700;
