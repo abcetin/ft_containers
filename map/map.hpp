@@ -78,6 +78,12 @@ namespace ft
 				return std::pair<iterator, bool>(iterator(_M_t.insert(value)), true);
 			}
 
+			iterator insert( iterator pos, const value_type& value )
+			{
+				_M_t.insert(pos._M_node, value);
+				return iterator(_M_t.search(_M_t._tree, value));
+			}
+
 			map& operator=( const map& other )
 			{
 				_M_t = other._M_t;
@@ -90,8 +96,25 @@ namespace ft
 				iterator i = iterator(lower_bound(_M_t._tree, key));
 				if (i == end() || key_compare()(key, (*i).first))
 					throw std::out_of_range(("map::at:	key not found"));
-				return i->second;
+				return (*i).second;
 			}
+
+			const mapped_type& at( const key_type& key ) const
+			{ 
+				const_iterator i = const_iterator(lower_bound(_M_t._tree, key));
+				if (i == end() || key_compare()(key, (*i).first))
+					throw std::out_of_range(("map::at:	key not found"));
+				return (*i).second;
+			}
+
+			// mapped_type& operator[]( const key_type& key )
+			// {
+			// 	iterator i = iterator(lower_bound(_M_t._tree, key));
+			// 	if (i == end() || key_compare()(key, (*i).first))
+			// 		insert(i._M_node, value_type(key, mapped_type()));
+			// 	return (*i)->second;
+			// }
+
 
 			iterator begin() { return _M_t.begin(); }
 

@@ -46,8 +46,8 @@ namespace ft
 		return _node;
 	}
 
-	template <typename _Base_ptr, typename _Val>
-	_Base_ptr lower_bound(_Base_ptr _node, const _Val& key)
+	template <typename _Base_ptr, typename _Key>
+	_Base_ptr lower_bound(_Base_ptr _node, const _Key &key)
 	{
 		_Base_ptr ret;
 		while (_node)
@@ -61,6 +61,36 @@ namespace ft
 				_node = _node->right_node;
 		}
 		return ret;
+	}
+
+	template <typename _Base_ptr, typename _Key>
+	_Base_ptr upper_bound(_Base_ptr _node, const _Key &key)
+	{
+		_Base_ptr ret;
+		while (_node)
+		{
+			if (key >= _node->data.first)
+			{
+				ret = _node;
+				_node = _node->right_node;
+			}
+			else
+				_node = _node->left_node;
+		}
+		return ret;
+	}
+
+	template <typename tree>
+	void print_tree(tree *avl, std::string str)
+	{
+		if (avl == NULL)
+			return;
+		std::cout << str << " " << avl->data.first << " " << avl->data.second << " ";
+		if (avl->parent_node)
+			std::cout << "parent :"<< avl->parent_node->data.first << " " << avl->parent_node->data.second;
+		std::cout << std::endl;
+		print_tree(avl->left_node, str + " left");
+		print_tree(avl->right_node, str + " right");
 	}
 
 };

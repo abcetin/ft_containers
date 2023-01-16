@@ -5,6 +5,7 @@
 #include "rotation.hpp"
 #include "insert_delete.hpp"
 #include "../../utils/reverse_iterator.hpp"
+#include "tree_utils.hpp"
 
 namespace ft
 {
@@ -65,6 +66,15 @@ namespace ft
 					ret = search(this->_tree, _value);
 				}
 				return ret;
+			}
+
+			_Base_ptr insert(_Base_ptr pos, const _Val& _value)
+			{
+				if (pos->data.first > _tree->data.first && _value.first < _tree->data.first)
+					return _add_with_balance(_tree, _value, _tree, _allocator);
+				if (pos->data.first < _tree->data.first && _value.first > _tree->data.first)
+					return _add_with_balance(_tree, _value, _tree, _allocator);
+				return _add_with_balance(pos, _value, pos, _allocator);
 			}
 			
 			_Base_ptr search(_Base_ptr _node, _Val _value)

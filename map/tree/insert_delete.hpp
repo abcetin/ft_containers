@@ -23,7 +23,7 @@ namespace ft
 		}
 		else if (_value.first < _node->data.first)
 			_node->left_node = _add_with_balance(_node->left_node, _value, _node, _allocator);
-		else if (_value.first >= _node->data.first)
+		else if (_value.first > _node->data.first)
 			_node->right_node = _add_with_balance(_node->right_node, _value, _node, _allocator);
 		else
 			return _node;
