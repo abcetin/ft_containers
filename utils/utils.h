@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <iterator>
+#include "is_integral.hpp"
 
 namespace ft
 {
@@ -37,14 +38,14 @@ namespace ft
      struct __are_same
      {
        enum { __value = 0 };
-       typedef std::false_type __type;
+       typedef ft::false_type __type;
      };
  
    template<typename _Tp>
      struct __are_same<_Tp, _Tp>
      {
        enum { __value = 1 };
-       typedef std::true_type __type;
+       typedef ft::true_type __type;
      };
 };
 #endif

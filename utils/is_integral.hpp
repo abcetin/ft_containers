@@ -14,12 +14,9 @@ namespace ft
 		operator value_type() const {return value;}
 	};
 
+	typedef integral_constant<bool, true>								true_type;
+	typedef integral_constant<bool, false>    							false_type;
 	template <class T>	struct	is_integral								{ static const bool value = false; };
-// 	template<>
-// struct	is_integral<wchar_t>
-// {
-// 	static const bool value = true;
-// };
 	template <> 		struct	is_integral<bool> 						{ static const bool value = true; };
 	template <> 		struct	is_integral<char>						{ static const bool value = true; };
 	// template <> 		struct	is_integral<char16_t>					{ static const bool value = true; };

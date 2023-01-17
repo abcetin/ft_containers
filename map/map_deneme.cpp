@@ -192,6 +192,8 @@ int main()
    	// // 	std::cout << it->first << " => " << it->second << '\n';
 	 for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
     	std::cout << it->first << " => " << it->second << '\n';
+
+	tmp2.clear();
 	// std::cout << "------------------\n";
 	//  for (std::map<char,int>::iterator it=mymap2.begin(); it!=mymap2.end(); it++)
     // 	std::cout << it->first << " => " << it->second << '\n';

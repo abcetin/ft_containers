@@ -3,6 +3,8 @@
 
 #include "../utils.hpp"
 #include "tree_utils.hpp"
+#include <unistd.h>
+#include <stdio.h>
 namespace ft
 {
 	template <typename _Base_ptr, typename _Value, typename _Alloc>
@@ -38,10 +40,10 @@ namespace ft
 		_Base_ptr temp;
 		if (!_node)
 			return _node;
-		if (_value > _node->data)
-			_node->right_node = _delete_node(_node->right_node, _value, _alloc);
-		else if (_value < _node->data)
+		if (_value.first < _node->data.first)
 			_node->left_node = _delete_node(_node->left_node, _value, _alloc);
+		else if (_value.first > _node->data.first)
+			_node->right_node = _delete_node(_node->right_node, _value, _alloc);
 		else
 		{
 			if (!(_node->left_node) || !(_node->right_node))
@@ -56,18 +58,24 @@ namespace ft
 					_node = temp;
 				_alloc.destroy(temp);
 				_alloc.deallocate(temp, 1);
+				temp = NULL;
 				return _node;
 			}
 			else
 			{
 				temp = _node->_maximum(_node->left_node);
-				//std::swap(_node, temp);
-				print_tree(temp, "temp ");
-				print_tree(_node, "node ");
-				exit(0);
-				_node->left_node = _delete_node(_node->left_node, temp->data, _alloc);
+				_Val _value = temp->data;
+				_Base_ptr left = _node->left_node;
+				_Base_ptr right = _node->right_node;
+				_Base_ptr parent = _node->parent_node;
+				_node->left_node = _delete_node(_node->left_node, _value, _alloc);
+				_alloc.construct(_node, _value);
+				_node->parent_node = parent;
+				_node->left_node = left;
+				_node->right_node = right;
 			}
 		}
+		// std::cout << "_node " << _node->data.first << std::endl;
 		_node->height = 1 + std::max(height(_node->left_node), height(_node->right_node));
 		_node = balance(_node);
 		return _node;
@@ -80,8 +88,8 @@ namespace ft
 			return tree;
 		create_node(&tree, first->data, _alloc);
 		tree->parent_node = parent;
-		tree->left_node = _copy(tree->left_node, first->left_node, tree,_alloc);
-		tree->right_node = _copy(tree->right_node, first->right_node, tree,_alloc);
+		tree->left_node = _copy(tree->left_node, first->left_node, tree, _alloc);
+		tree->right_node = _copy(tree->right_node, first->right_node, tree, _alloc);
 		return tree;
 	}
 

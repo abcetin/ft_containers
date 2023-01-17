@@ -120,23 +120,19 @@ namespace ft
 
 			void clear() 
 			{
-				iterator begin = this->begin();
+				//iterator begin = this->begin();
 				//iterator temp;
-				while (begin != end())
-				{
-					//temp = begin;
-					delete_node(begin._M_node->data);
-					begin++;
-				}
-				this->_count = 0;
-				this->_tree->right_node = this->_end;
-				this->_tree->left_node = this->_end;
-				this->_tree = 0;
+				_tree =	_delete_node(_tree ,ft::pair<const char, int>('b', 200), _allocator);
+				print_tree(_tree, "delete");
+				// this->_count = 0;
+				// this->_tree->right_node = this->_end;
+				// this->_tree->left_node = this->_end;
+				// this->_tree = 0;
 			}
 			
 			~avl_tree()
 			{
-				clear();
+				//clear();
 			}
 	};
 };
