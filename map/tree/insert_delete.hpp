@@ -55,7 +55,13 @@ namespace ft
 					_node = NULL;
 				}
 				else
-					_node = temp;
+				{
+					_Base_ptr parent = _node->parent_node;
+					std::cout << "temp "<< _node->data.first << std::endl;
+					std::swap(_node, temp);
+					_node->parent_node = parent;
+					std::cout << "temp "<< _node->data.first << std::endl;
+				}
 				_alloc.destroy(temp);
 				_alloc.deallocate(temp, 1);
 				temp = NULL;
