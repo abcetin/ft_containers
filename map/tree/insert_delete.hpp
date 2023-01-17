@@ -35,13 +35,13 @@ namespace ft
 	template <typename _Base_ptr, typename _Val, typename _Alloc>
 	_Base_ptr _delete_node(_Base_ptr _node, const _Val &_value, _Alloc _alloc)
 	{
-		_Base_ptr *temp;
+		_Base_ptr temp;
 		if (!_node)
 			return _node;
 		if (_value > _node->data)
-			_node->right_node = _delete_node(_node->right_node, _value);
+			_node->right_node = _delete_node(_node->right_node, _value, _alloc);
 		else if (_value < _node->data)
-			_node->left_node = _delete_node(_node->left_node, _value);
+			_node->left_node = _delete_node(_node->left_node, _value, _alloc);
 		else
 		{
 			if (!(_node->left_node) || !(_node->right_node))
@@ -60,9 +60,12 @@ namespace ft
 			}
 			else
 			{
-				temp = _node->_maxmimum(_node);
-				_node->data = temp->data;
-				_node->left_node = _delete_node(_node->left_node, temp->data);
+				temp = _node->_maximum(_node->left_node);
+				//std::swap(_node, temp);
+				print_tree(temp, "temp ");
+				print_tree(_node, "node ");
+				exit(0);
+				_node->left_node = _delete_node(_node->left_node, temp->data, _alloc);
 			}
 		}
 		_node->height = 1 + std::max(height(_node->left_node), height(_node->right_node));

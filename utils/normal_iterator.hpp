@@ -27,11 +27,11 @@ namespace ft
 
 			explicit normal_iterator(const _Iterator& _i) : _current(_i){}
 
-			// Yineleyicinin const_iterator olmasına izin verir
+			//Yineleyicinin const_iterator olmasına izin verir
 			template<typename _Iter> 
 			normal_iterator(const normal_iterator<_Iter,
-			typename  ft::enable_if<(std::__are_same<_Iter, typename _Container::pointer>::__value),
-            _Container>::__type>& _i) : _current(_i.base()){}
+			typename  ft::enable_if<(ft::__are_same<_Iter, typename _Container::pointer>::__value),
+            _Container>::type>& _i) : _current(_i.base()){}
 
 			reference operator*() const {return *_current;}
 

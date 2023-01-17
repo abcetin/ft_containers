@@ -32,11 +32,11 @@ namespace ft
 			return _minimum(_x->left_node);
 		}
 
-		_Base_ptr _maxmimum(_Base_ptr _x)
+		_Base_ptr _maximum(_Base_ptr _x)
 		{
 			if (!_x || !_x->right_node)
 				return _x;
-			return _maxmimum(_x->right_node);
+			return _maximum(_x->right_node);
 		}
 	};
 
@@ -73,7 +73,7 @@ namespace ft
 		if (!_x && _x->parent_node->parent_node == _x)
 		 	_x = _x->right_node;
 		else if (_x->left_node)
-			_x = _x->_maxmimum(_x->left_node);
+			_x = _x->_maximum(_x->left_node);
 		else
 		{
 			_y = _x->parent_node;

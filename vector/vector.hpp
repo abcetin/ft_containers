@@ -103,7 +103,7 @@ namespace ft
 			}
 			
 			template<typename InputIt> vector(InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!is_integral<InputIt>::value, bool>::type = true) :
-			_allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0) //
+			_allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0)
 			{
 				size_type len = 0;
 				InputIt temp = first;
@@ -121,7 +121,7 @@ namespace ft
 				}
 			}
 
-            ~vector() //
+            ~vector()
 			{
 				if (_start)
 				{
@@ -159,7 +159,7 @@ namespace ft
 				return(*this);
 			}
 
-            void assign( size_type count, const T& value ) //
+            void assign( size_type count, const T& value )
 			{
 				clear();
 				if (count > capacity())
@@ -177,7 +177,7 @@ namespace ft
 				
 			}
 
-            template< class InputIterator > void assign( InputIterator first, InputIterator last , typename ft::enable_if<!is_integral<InputIterator>::value, bool>::type = true) //
+            template< class InputIterator > void assign( InputIterator first, InputIterator last , typename ft::enable_if<!is_integral<InputIterator>::value, bool>::type = true)
 			{
 				difference_type len = 0;
 				InputIterator temp = first;
@@ -200,7 +200,7 @@ namespace ft
 				this->_finish = this->_start + len;
 			}
 
-            allocator_type get_allocator() const{ return this->_allocator_type;} //
+            allocator_type get_allocator() const{ return this->_allocator_type;}
 
             reference at( size_type pos )
 			{
@@ -215,38 +215,45 @@ namespace ft
 				return const_reference(this->_start[pos]);
 			}
 
-            reference operator[]( size_type pos ){return reference(this->_start[pos]);} //
-            const_reference operator[]( size_type pos ) const {return const_reference(this->_start[pos]);} //
+            reference operator[]( size_type pos ){return reference(this->_start[pos]);}
 
-            reference front(){return *begin();} //
-            const_reference front() const{return *begin();} //
+            const_reference operator[]( size_type pos ) const {return const_reference(this->_start[pos]);}
+
+            reference front(){return *begin();}
+
+            const_reference front() const{return *begin();}
 
 			reverse_iterator rbegin() {return reverse_iterator(end());}
+
 			const_reverse_iterator	rbegin() const {return const_reverse_iterator(end());}
 
 			reverse_iterator rend() {return reverse_iterator(begin());}
+
 			const_reverse_iterator rend() const {return const_reverse_iterator(begin());}
 
-            reference back(){return *(end() - 1);}//
-            const_reference back() const{return *(end() - 1);}//
+            reference back(){return *(end() - 1);}
+            const_reference back() const{return *(end() - 1);}
 
-            T* data(){return pointer(this->_start);} //
-            const T* data() const{return const_pointer(this->_start);} //
+            T* data(){return pointer(this->_start);}
+            const T* data() const{return const_pointer(this->_start);}
 
-			iterator begin(){return iterator(this->_start);} //
-			const_iterator begin() const {return const_iterator(this->_start);} //
+			iterator begin(){return iterator(this->_start);}
+			const_iterator begin() const {return const_iterator(this->_start);}
 
-			iterator end(){return iterator(this->_finish);} //
-			const_iterator end() const{return const_iterator(this->_finish);} //
+			iterator end(){return iterator(this->_finish);}
+			
+			const_iterator end() const{return const_iterator(this->_finish);}
 
-            bool empty() const {return begin() == end();} //
+            bool empty() const {return begin() == end();}
 
-            size_type size() const {return size_type(this->_finish - this->_start);} //
+            size_type size() const {return size_type(this->_finish - this->_start);}
 
-            size_type max_size() const{return this->_allocator_type.max_size();} //
+            size_type max_size() const{return this->_allocator_type.max_size();}
 
-            void reserve( size_type new_cap ) //
+            void reserve( size_type new_cap )
 			{
+				if (new_cap > max_size())
+					throw std::length_error("vector::reserve");
 				if (new_cap > capacity())
 				{
 					if (this->_start)
@@ -272,9 +279,9 @@ namespace ft
 				}
 			}
 
-            size_type capacity() const {return size_type(this->_end_of_capacity - this->_start);} //
+            size_type capacity() const {return size_type(this->_end_of_capacity - this->_start);}
 
-            void clear() //
+            void clear()
 			{
 				size_type _size = size();
 				for (size_t i = 0; i < _size; i++)
@@ -282,7 +289,7 @@ namespace ft
 				this->_finish = this->_start;
 			}
 
-            iterator insert(iterator pos, const T& _value) //
+            iterator insert(iterator pos, const T& _value)
 			{
 				size_type _new_pos = size_type(pos - begin());
 				size_type _len;
@@ -359,7 +366,7 @@ namespace ft
 				return pos;
 			}
 
-            iterator erase( iterator pos ) //
+            iterator erase( iterator pos ) 
 			{
 				if (pos + 1 != end())
 				{
@@ -374,7 +381,7 @@ namespace ft
 				return(pos);
 			}
 
-            iterator erase(iterator first, iterator last) //
+            iterator erase(iterator first, iterator last) 
 			{
 				if (first != last && size_type((last + 1) - begin()) < size_type(end() - begin()))
 				{
@@ -398,7 +405,7 @@ namespace ft
 				return (first);
 			}
 
-            void push_back( const T& value ) //
+            void push_back( const T& value ) 
 			{
 				if (this->_finish != this->_end_of_capacity)
 				{
@@ -409,13 +416,13 @@ namespace ft
 					insert(end(), value);
 			}
 
-            void pop_back()//
+            void pop_back()
 			{
 				this->_allocator_type.destroy(this->_finish);
 				this->_finish--;
 			}
 
-            void resize( size_type count, T value = T()) //
+            void resize( size_type count, T value = T()) 
 			{
 				size_type _end = size();
 				if (count > _end)

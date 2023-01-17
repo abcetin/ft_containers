@@ -48,8 +48,7 @@ namespace ft
 				if (_x._tree)
 				{
 					this->_tree = _copy(this->_tree, _x._tree, this->_end, _allocator);
-					//this->_end = _x._end;
-					//this->_count = _x.size();
+					this->_count = _x.size();
 				}
 			}
 
@@ -59,7 +58,7 @@ namespace ft
 				if (!ret)
 				{
 					this->_tree = _add_with_balance(this->_tree, _value, this->_tree, _allocator);
-					_Base_ptr max = _tree->_maxmimum(_tree);
+					_Base_ptr max = _tree->_maximum(_tree);
 					this->_tree->parent_node = this->_end;
 					this->_end->parent_node = max;
 					this->_count++;
@@ -70,6 +69,7 @@ namespace ft
 
 			_Base_ptr insert(_Base_ptr pos, const _Val& _value)
 			{
+				this->_count++;
 				if (pos->data.first > _tree->data.first && _value.first < _tree->data.first)
 					return _add_with_balance(_tree, _value, _tree, _allocator);
 				if (pos->data.first < _tree->data.first && _value.first > _tree->data.first)
@@ -117,13 +117,26 @@ namespace ft
 			size_type size() { return this->_count; }
 
 			size_type max_size() const { return this->_allocator.max_size(); }
+
+			void clear() 
+			{
+				iterator begin = this->begin();
+				//iterator temp;
+				while (begin != end())
+				{
+					//temp = begin;
+					delete_node(begin._M_node->data);
+					begin++;
+				}
+				this->_count = 0;
+				this->_tree->right_node = this->_end;
+				this->_tree->left_node = this->_end;
+				this->_tree = 0;
+			}
 			
 			~avl_tree()
 			{
-				// while(_tree)
-				// {
-				// 	_delete_node(_tree->data);
-				// }
+				clear();
 			}
 	};
 };

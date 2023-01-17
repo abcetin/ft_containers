@@ -26,7 +26,7 @@ namespace ft
 			Container c;
 		
 		public:
-			stack(const Container& _c) : c(_c) {}
+			stack(const stack& other) : c(other.c) {}
 
 			explicit stack(const Container& __c = Container()): c(__c){}
 

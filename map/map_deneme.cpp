@@ -155,7 +155,7 @@ int main()
 	it = tmp2.insert(it, ft::pair<char, int>('z', 900));
 	std::cout << "it : " << it._M_node->data.first << std::endl;
 	//print_tree(tmp2._M_t._tree, "root");
-//	tmp2['e'] = 100;
+	tmp2['e'];
 	for (ft::map<char, int>::iterator it = tmp2.begin(); it != tmp2.end(); it++)
 	{
 		std::cout << it._M_node->data.first << std::endl;
@@ -175,6 +175,7 @@ int main()
 	std::map<char,int>::iterator i1;
 	i1 = mymap.insert(mymap.begin(), std::pair<char,int>('z',900) );
 	std::cout << "i1 : "<<i1->first << std::endl;
+	mymap['e'] = 10;
   	// // mymap['e'] = 500;
   	// // mymap['f'] = 600;
 	// // mymap['g'] = 700;

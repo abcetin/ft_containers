@@ -84,6 +84,16 @@ namespace ft
 				return iterator(_M_t.search(_M_t._tree, value));
 			}
 
+			template< class InputIt >
+			void insert( InputIt first, InputIt last )
+			{
+				while(first != last)
+				{
+					_M_t.insert(end(), *first);
+					first++;
+				}
+			}
+
 			map& operator=( const map& other )
 			{
 				_M_t = other._M_t;
@@ -107,18 +117,38 @@ namespace ft
 				return (*i).second;
 			}
 
-			// mapped_type& operator[]( const key_type& key )
-			// {
-			// 	iterator i = iterator(lower_bound(_M_t._tree, key));
-			// 	if (i == end() || key_compare()(key, (*i).first))
-			// 		insert(i._M_node, value_type(key, mapped_type()));
-			// 	return (*i)->second;
-			// }
+			mapped_type& operator[]( const key_type& key )
+			{
+				iterator i = iterator(lower_bound(_M_t._tree, key));
+				if (i == end() || key_compare()(key, (*i).first))
+					insert(i, ft::make_pair(key, mapped_type()));
+				return (*i).second;
+			}
 
+			void swap( map& other )
+			{
+				
+			}
 
 			iterator begin() { return _M_t.begin(); }
 
-			iterator end() { return _M_t.end(); }			
+			iterator end() { return _M_t.end(); }
+
+			reverse_iterator rbegin() { return _M_t.rbegin(); }
+
+			const_reverse_iterator rbegin() const { return _M_t.rbegin(); }
+
+			reverse_iterator rend() { return _M_t.rend(); }
+
+			const_reverse_iterator rend() const { return _M_t.rend(); }
+
+			bool empty() const { return _M_t.empty(); }
+
+			size_type size() const { return _M_t.size(); }
+
+			size_type max_size() const { return _M_t.max_size(); }
+
+			void clear() { _M_t.clear(); }
 	};
 };
 
