@@ -46,42 +46,31 @@ namespace ft
 		return _node;
 	}
 
-	template <typename _Base_ptr, typename _Key>
-	_Base_ptr _lower_bound(_Base_ptr _node, const _Key &key)
-	{
-		_Base_ptr ret;
-		while (_node)
-		{
-			if (key <= _node->data.first)
-			{
-				ret = _node;
-				_node = _node->left_node;
-			}
-			else
-				_node = _node->right_node;
-		}
-		return ret;
-	}
+	// template <typename _Base_ptr, typename _Key>
+	// _Base_ptr _lower_bound(_Base_ptr _node, const _Key &key)
+	// {
+		
+	// }
 
-	template <typename _Base_ptr, typename _Key>
-	_Base_ptr _upper_bound(_Base_ptr _node, const _Key &key)
-	{
-		_Base_ptr ret;
-		while (_node)
-		{
-			if (key >= _node->data.first)
-			{
-				ret = _node;
-				_node = _node->right_node;
-			}
-			else
-				_node = _node->left_node;
-		}
-		return ret;
-	}
+	// template <typename _Base_ptr, typename _Key>
+	// _Base_ptr _upper_bound(_Base_ptr _node, const _Key &key)
+	// {
+	// 	_Base_ptr ret;
+	// 	while (_node)
+	// 	{
+	// 		if (key >= _node->data.first)
+	// 		{
+	// 			ret = _node;
+	// 			_node = _node->right_node;
+	// 		}
+	// 		else
+	// 			_node = _node->left_node;
+	// 	}
+	// 	return ret;
+	// }
 
-	template <typename tree>
-	void print_tree(tree *avl, std::string str)
+	template <typename map>
+	void print_tree(map avl, std::string str)
 	{
 		if (avl == NULL)
 			return;

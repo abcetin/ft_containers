@@ -11,10 +11,12 @@ namespace ft
 		first_type	first;
 		second_type	second;
 
-		pair () : first(), second() {}
-		pair( const _T1& x, const _T2& y ) : first(x), second(y) {}
+		explicit pair(): first(), second() {};
+		
+		template<class U, class V>
+		pair (const pair<U,V>& pr): first(pr.first), second(pr.second){};
 
-		template< class U1, class U2 > pair( const pair<U1, U2>& p ) : first(p.first), second(p.second) {}
+		pair (const first_type& a, const second_type& b): first(a), second(b) {};
 
 		pair& operator=( const pair& other )
 		{

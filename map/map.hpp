@@ -72,7 +72,7 @@ namespace ft
 
 			map& operator=( const map& other )
 			{
-				_M_t = other._M_t;
+				this->_M_t = other._M_t;
 				return *this;
 			}
 
@@ -96,7 +96,7 @@ namespace ft
 			{
 				while(first != last)
 				{
-					_M_t.insert(end(), *first);
+					_M_t.insert(*first);
 					first++;
 				}
 			}
@@ -105,7 +105,7 @@ namespace ft
 
 			mapped_type& at( const key_type& key ) 
 			{ 
-				iterator i = iterator(_lower_bound(_M_t._tree, key));
+				iterator i = iterator(_M_t.lower_bound(ft::make_pair(key, mapped_type())));
 				if (i == end() || key_compare()(key, (*i).first))
 					throw std::out_of_range(("map::at:	key not found"));
 				return (*i).second;
@@ -113,7 +113,7 @@ namespace ft
 
 			const mapped_type& at( const key_type& key ) const
 			{ 
-				const_iterator i = const_iterator(_lower_bound(_M_t._tree, key));
+				const_iterator i = const_iterator(_M_t.lower_bound(ft::make_pair(key, mapped_type())));
 				if (i == end() || key_compare()(key, (*i).first))
 					throw std::out_of_range(("map::at:	key not found"));
 				return (*i).second;
@@ -121,16 +121,11 @@ namespace ft
 
 			mapped_type& operator[]( const key_type& key )
 			{
-				iterator i = iterator(_lower_bound(_M_t._tree, key));
+				iterator i = iterator(lower_bound(key));
 				if (i == end() || key_compare()(key, (*i).first))
-					insert(i, ft::make_pair(key, mapped_type()));
+					i = insert(i, ft::make_pair(key, mapped_type()));
 				return (*i).second;
 			}
-
-			// void swap( map& other )
-			// {
-				
-			// }
 
 			iterator begin() { return _M_t.begin(); }
 

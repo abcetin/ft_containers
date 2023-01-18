@@ -6,6 +6,7 @@
 #include "insert_delete.hpp"
 #include "../../utils/reverse_iterator.hpp"
 #include "tree_utils.hpp"
+#include <limits>
 
 namespace ft
 {
@@ -36,13 +37,11 @@ namespace ft
 
 		public:
 
-			avl_tree(): _tree(), _count(0), _key_compare(), _allocator() { std::cout << _tree << std::endl; create_node(&this->_end, _Val(), _allocator);}
+			avl_tree(): _tree(), _count(0), _key_compare(), _allocator() {create_node(&this->_end, _Val(), _allocator);}
 
 			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _tree(), _end(0), _count(0), _key_compare(_comp), _allocator(_a)
 			{
 				create_node(&this->_end, _Val(), _allocator);
-				//_tree = _end;
-				//std::cout << _tree->data.first << std::endl;
 			}
 
 			avl_tree (const avl_tree& _x) : _key_compare(_x._key_compare), _allocator(_x._allocator), _count(_x._count)
@@ -52,6 +51,23 @@ namespace ft
 					this->_tree = _copy(this->_tree, _x._tree, this->_end, _allocator);
 					this->_count = _x.size();
 				}
+			}
+
+			avl_tree& operator=(const avl_tree& _x)
+			{
+				if (this != &_x)
+				{
+					clear();
+					_key_compare = _x._key_compare;
+					_allocator = _x._allocator;
+					if (_x._tree != 0)
+					{
+						_tree = _copy(_tree, _x._tree, _tree, _allocator);
+						_count = _x._count;
+						_tree->parent_node = _end;
+					}
+				}
+				return *this;
 			}
 
 			_Base_ptr insert(const _Val& _value)
@@ -72,11 +88,21 @@ namespace ft
 			_Base_ptr insert(_Base_ptr pos, const _Val& _value)
 			{
 				this->_count++;
-				if (pos->data.first > _tree->data.first && _value.first < _tree->data.first)
-					return _add_with_balance(_tree, _value, _tree, _allocator);
-				if (pos->data.first < _tree->data.first && _value.first > _tree->data.first)
-					return _add_with_balance(_tree, _value, _tree, _allocator);
-				return _add_with_balance(pos, _value, pos, _allocator);
+				if (!_tree)
+				{
+					_tree = _add_with_balance(_tree, _value, _tree, _allocator);
+					_tree->parent_node = _end;
+				}
+				else if (pos->data.first > _tree->data.first && _value.first < _tree->data.first)
+					_tree =  _add_with_balance(_tree, _value, _tree, _allocator);
+				else if (pos->data.first < _tree->data.first && _value.first > _tree->data.first)
+					_tree = _add_with_balance(_tree, _value, _tree, _allocator);
+				else
+				{
+					pos = _add_with_balance(pos, _value, pos, _allocator);
+					return pos;
+				}
+				return _tree;
 			}
 			
 			_Base_ptr search(_Base_ptr _node, _Val _value)
@@ -94,6 +120,8 @@ namespace ft
 
 			void clear() 
 			{
+				if (!_tree)
+					return;
 				iterator first = this->begin();
 				iterator temp;
 				while(first != end())
@@ -113,7 +141,7 @@ namespace ft
 
 			void delete_node(const _Val& _value) { this->_tree = _delete_node(this->_tree, _value, _allocator); this->_count--; }
 
-			allocator_type get_allocator() { return this->_allocator; }
+			allocator_type get_allocator() const { return this->_allocator; }
 
 			const_iterator begin() const { return const_iterator(this->_tree->_minimum(_tree)); }
 			
@@ -135,26 +163,74 @@ namespace ft
 
 			size_type size() const { return this->_count; }
 
-			size_type max_size() const { return this->_allocator.max_size(); }
+			size_type max_size() const { return get_allocator().max_size(); }
 
 			_Base_ptr lower_bound(const value_type& _value)
 			{
-				return _lower_bound(_tree, _value.first);
+				_Base_ptr ret = _end;
+				_Base_ptr _node = _tree;
+				while (_node)
+				{
+					if (!_key_compare(_node->data.first, _value.first))
+					{
+						ret = _node;
+						_node = _node->left_node;
+					}
+					else
+						_node = _node->right_node;
+				}
+				return ret;
 			}
 
 			_Base_ptr lower_bound(const value_type& _value) const
 			{
-				return _lower_bound(_tree, _value.first);
+				_Base_ptr ret = _end;
+				_Base_ptr _node = _tree;
+				while (_node)
+				{
+					if (!_key_compare(_node->data.first, _value.first))
+					{
+						ret = _node;
+						_node = _node->left_node;
+					}
+					else
+						_node = _node->right_node;
+				}
+				return ret;
 			}
 
 			_Base_ptr upper_bound(const value_type& _value)
 			{
-				return _upper_bound(_tree, _value.first);
+				_Base_ptr ret = _end;
+				_Base_ptr _node = _tree;
+				while (_node)
+				{
+					if (_key_compare(_value.first, _node->data.first))
+					{
+						ret = _node;
+						_node = _node->left_node;
+					}
+					else
+						_node = _node->right_node;
+				}
+				return ret;
 			}
 
 			_Base_ptr upper_bound(const value_type& _value) const
 			{
-				return _upper_bound(_tree, _value.first);
+				_Base_ptr ret = _end;
+				_Base_ptr _node = _tree;
+				while (_node)
+				{
+					if (_key_compare(_value.first, _node->data.first))
+					{
+						ret = _node;
+						_node = _node->left_node;
+					}
+					else
+						_node = _node->right_node;
+				}
+				return ret;
 			}
 			
 			// void swap(avl_tree& other)
@@ -167,6 +243,49 @@ namespace ft
 				//clear();
 			}
 	};
+
+	template<typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    bool operator==(const avl_tree<_Val, _Compare, _Alloc>& __x,
+	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    {
+      return __x.size() == __y.size()
+         && ft::equal(__x.begin(), __x.end(), __y.begin());
+    }
+
+	template<typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    bool operator<(const avl_tree<_Val, _Compare, _Alloc>& __x,
+	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    {
+      return ft::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end());
+    }
+
+	template<typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    bool operator!=(const avl_tree<_Val, _Compare, _Alloc>& __x,
+	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    {
+      return !(__x == __y);
+    }
+
+	template<typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    bool operator>(const avl_tree<_Val, _Compare, _Alloc>& __x,
+	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    {
+      return __y < __x;
+    }
+
+	template<typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    bool operator<=(const avl_tree<_Val, _Compare, _Alloc>& __x,
+	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    {
+      return !(__y < __x);
+    }
+
+	template<typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    bool operator>=(const avl_tree<_Val, _Compare, _Alloc>& __x,
+	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    {
+      return !(__x < __y);
+    }
 };
 
 #endif
