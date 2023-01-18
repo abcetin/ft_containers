@@ -47,7 +47,7 @@ namespace ft
 	}
 
 	template <typename _Base_ptr, typename _Key>
-	_Base_ptr lower_bound(_Base_ptr _node, const _Key &key)
+	_Base_ptr _lower_bound(_Base_ptr _node, const _Key &key)
 	{
 		_Base_ptr ret;
 		while (_node)
@@ -64,7 +64,7 @@ namespace ft
 	}
 
 	template <typename _Base_ptr, typename _Key>
-	_Base_ptr upper_bound(_Base_ptr _node, const _Key &key)
+	_Base_ptr _upper_bound(_Base_ptr _node, const _Key &key)
 	{
 		_Base_ptr ret;
 		while (_node)

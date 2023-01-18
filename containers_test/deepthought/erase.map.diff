@@ -1,8 +1,8 @@
-1,107d0
+1c1
 < size: 10
-< max_size: 288230376151711743
-< 
-< Content is:
+---
+> size: 9
+5,14d4
 < - key: 0 | value: AAAAAAAAAA
 < - key: 1 | value: BBBBBBBBB
 < - key: 2 | value: CCCCCCCC
@@ -13,12 +13,11 @@
 < - key: 7 | value: HHH
 < - key: 8 | value: II
 < - key: 9 | value: J
-< ###############################################
-< 	-- [0] --
+17c7
 < size: 9
-< max_size: 288230376151711743
-< 
-< Content is:
+---
+> size: 8
+21,29d10
 < - key: 0 | value: AAAAAAAAAA
 < - key: 2 | value: CCCCCCCC
 < - key: 3 | value: DDDDDDD
@@ -28,44 +27,27 @@
 < - key: 7 | value: HHH
 < - key: 8 | value: II
 < - key: 9 | value: J
-< ###############################################
-< 	-- [1] --
+32c13
 < size: 8
-< max_size: 288230376151711743
-< 
-< Content is:
-< - key: 2 | value: CCCCCCCC
-< - key: 3 | value: DDDDDDD
-< - key: 4 | value: EEEEEE
-< - key: 5 | value: FFFFF
-< - key: 6 | value: GGGG
-< - key: 7 | value: HHH
-< - key: 8 | value: II
+---
+> size: 7
+35a17
+> - key: 1 | value: BBBBBBBBB
+43d24
 < - key: 9 | value: J
-< ###############################################
-< 	-- [2] --
+46c27
 < size: 7
-< max_size: 288230376151711743
-< 
-< Content is:
-< - key: 2 | value: CCCCCCCC
-< - key: 3 | value: DDDDDDD
-< - key: 4 | value: EEEEEE
-< - key: 5 | value: FFFFF
-< - key: 6 | value: GGGG
-< - key: 7 | value: HHH
-< - key: 8 | value: II
-< ###############################################
-< 	-- [3] --
+---
+> size: 6
+49a31
+> - key: 1 | value: BBBBBBBBB
+59c41
 < size: 4
-< max_size: 288230376151711743
-< 
-< Content is:
-< - key: 5 | value: FFFFF
-< - key: 6 | value: GGGG
-< - key: 7 | value: HHH
-< - key: 8 | value: II
-< ###############################################
+---
+> size: 3
+62a45
+> - key: 4 | value: EEEEEE
+68,107d50
 < 	-- [4] --
 < size: 2
 < max_size: 288230376151711743

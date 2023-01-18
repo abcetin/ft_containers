@@ -20,7 +20,7 @@ namespace ft
 		_Base_ptr right_node;
 		_Base_ptr parent_node;
 
-		node(){data = NULL;}
+		node() : data(), height(0), left_node(), right_node(), parent_node() {}
 
 		node(const T &_value, _Base_ptr left = NULL, _Base_ptr right = NULL, _Base_ptr parent = NULL)
 			: data(_value), height(1), left_node(left), right_node(right), parent_node(parent) {}

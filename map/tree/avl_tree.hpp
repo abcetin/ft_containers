@@ -15,18 +15,19 @@ namespace ft
 		public:
 			typedef typename _Allocator::template rebind<node<_Val> >::other	allocator_type;
 			typedef _Val														value_type;
-			typedef value_type*													pointer;
-			typedef const value_type*											const_pointer;
-			typedef value_type&													reference;
-			typedef const value_type&											const_reference;
+			typedef typename allocator_type::pointer							pointer;
+			typedef typename allocator_type::const_pointer						const_pointer;
+			typedef typename allocator_type::reference							reference;
+			typedef typename allocator_type::const_reference					const_reference;
 			typedef size_t														size_type;
 			typedef ptrdiff_t													difference_type;
-			typedef const ft::tree_iterator<_Val>								const_iterator;
-			typedef ft::tree_iterator<_Val>										iterator;
+			typedef ft::const_tree_iterator<value_type>							const_iterator;
+			typedef ft::tree_iterator<value_type>								iterator;
 			typedef ft::reverse_iterator<iterator>								const_reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>						reverse_iterator;
 			typedef ft::node<_Val>*												_Base_ptr;
-			
+			typedef const ft::node<_Val>*										_Const_Base_ptr;
+
 			_Base_ptr		_tree;
 			_Base_ptr		_end;
 			size_type		_count;
@@ -35,12 +36,13 @@ namespace ft
 
 		public:
 
-			avl_tree(): _tree(), _count(0) { create_node(&this->_end, _Val(), _allocator);}
+			avl_tree(): _tree(), _count(0), _key_compare(), _allocator() { std::cout << _tree << std::endl; create_node(&this->_end, _Val(), _allocator);}
 
-			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _tree(), _key_compare(_comp), _allocator(_a), _count(0)
+			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _tree(), _end(0), _count(0), _key_compare(_comp), _allocator(_a)
 			{
 				create_node(&this->_end, _Val(), _allocator);
-				this->_tree->parent_node = this->_end;
+				//_tree = _end;
+				//std::cout << _tree->data.first << std::endl;
 			}
 
 			avl_tree (const avl_tree& _x) : _key_compare(_x._key_compare), _allocator(_x._allocator), _count(_x._count)
@@ -90,9 +92,26 @@ namespace ft
 				return _node;
 			}
 
+			void clear() 
+			{
+				iterator first = this->begin();
+				iterator temp;
+				while(first != end())
+				{
+					temp = first;
+					first++;
+					_allocator.destroy(temp._M_node);
+					_allocator.deallocate(temp._M_node, 1);
+				}
+				_tree->left_node = _end;
+				_tree->right_node = _end;
+				_tree = NULL;
+				_count = 0;
+			}
+
 			int get_balance() { return _get_balance(this->_tree); }
 
-			void delete_node(const _Val& _value) { this->_tree = _delete_node(this->_tree, _value, _allocator); }
+			void delete_node(const _Val& _value) { this->_tree = _delete_node(this->_tree, _value, _allocator); this->_count--; }
 
 			allocator_type get_allocator() { return this->_allocator; }
 
@@ -114,22 +133,35 @@ namespace ft
 
 			bool empty() { return this->_count == 0; }
 
-			size_type size() { return this->_count; }
+			size_type size() const { return this->_count; }
 
 			size_type max_size() const { return this->_allocator.max_size(); }
 
-			void clear() 
+			_Base_ptr lower_bound(const value_type& _value)
 			{
-				//iterator begin = this->begin();
-				//iterator temp;
-				_tree =	_delete_node(_tree ,ft::pair<const char, int>('b', 200), _allocator);
-				print_tree(_tree, "delete");
-				// this->_count = 0;
-				// this->_tree->right_node = this->_end;
-				// this->_tree->left_node = this->_end;
-				// this->_tree = 0;
+				return _lower_bound(_tree, _value.first);
+			}
+
+			_Base_ptr lower_bound(const value_type& _value) const
+			{
+				return _lower_bound(_tree, _value.first);
+			}
+
+			_Base_ptr upper_bound(const value_type& _value)
+			{
+				return _upper_bound(_tree, _value.first);
+			}
+
+			_Base_ptr upper_bound(const value_type& _value) const
+			{
+				return _upper_bound(_tree, _value.first);
 			}
 			
+			// void swap(avl_tree& other)
+			// {
+
+			// }
+
 			~avl_tree()
 			{
 				//clear();

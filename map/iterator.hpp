@@ -20,13 +20,13 @@ namespace ft
 
 		_Base_ptr _M_node;
 
-		tree_iterator(): _M_node(_Tp()) {}
+		tree_iterator(): _M_node() {}
 
 		explicit tree_iterator(const _Base_ptr _x) : _M_node(_x) {}
 
 		reference operator*() const { return _M_node->data; }
 
-		pointer operator->() const { return &_M_node->data; }
+		pointer operator->() const { return (&(operator*())); }
 
 		_Self& operator++()
 		{
@@ -36,7 +36,7 @@ namespace ft
 
 		_Self operator++(int)
 		{
-			tree_iterator _temp = *this;
+			_Self _temp = *this;
 			_M_node = tree_increment(_M_node);
 			return _temp;
 		}
@@ -49,17 +49,17 @@ namespace ft
 
 		_Self operator--(int)
 		{
-			tree_iterator _temp = *this;
+			_Self _temp = *this;
 			_M_node = tree_decrement(_M_node);
 			return _temp;
 		}
 
-		bool operator!=(const _Self &_x)
+		bool operator!=(const _Self &_x) const
 		{
 			return _x._M_node != _M_node;
 		}
 
-		bool operator==(const _Self &_x)
+		bool operator==(const _Self &_x) const
 		{
 			return _x._M_node == _M_node;
 		}
@@ -68,28 +68,28 @@ namespace ft
 	template <typename _Tp>
 	struct const_tree_iterator
 	{
-		typedef _Tp		value_type;
-		typedef _Tp&	reference;
-		typedef _Tp*	pointer;
+		typedef _Tp			value_type;
+		typedef const _Tp&	reference;
+		typedef const _Tp*	pointer;
 
-		typedef std::ptrdiff_t 							difference_type;
-		typedef std::bidirectional_iterator_tag			iterator_category;
-		typedef tree_iterator<_Tp>						iterator;
+		typedef std::ptrdiff_t 									difference_type;
+		typedef std::bidirectional_iterator_tag					iterator_category;
+		typedef tree_iterator<value_type>						iterator;
 
-		typedef const_tree_iterator<_Tp>				_Self;
-		typedef typename node<_Tp>::_Const_Base_ptr		_Base_ptr;
+		typedef const_tree_iterator<value_type>					_Self;
+		typedef typename node<value_type>::_Const_Base_ptr		_Base_ptr;
 
 		_Base_ptr _M_node;
 
-		const_tree_iterator(): _M_node(_Tp()) {}
+		const_tree_iterator(): _M_node() {}
 
-		explicit const_tree_iterator(const _Base_ptr _x) : _M_node(_x) {}
+		explicit const_tree_iterator(_Base_ptr _x) : _M_node(_x) {}
 
-		const_tree_iterator(const_tree_iterator& _it) : _M_node(_it._M_node) {}
+		const_tree_iterator(const iterator& _it) : _M_node(_it._M_node) {}
 
 		reference operator*() const { return _M_node->data; }
 
-		pointer operator->() const { return &_M_node->data; }
+		pointer operator->() const { return (&(operator*())); }
 
 		_Self& operator++()
 		{
@@ -99,7 +99,7 @@ namespace ft
 
 		_Self operator++(int)
 		{
-			const_tree_iterator _temp = *this;
+			_Self _temp = *this;
 			_M_node = tree_increment(_M_node);
 			return _temp;
 		}
@@ -112,17 +112,17 @@ namespace ft
 
 		_Self operator--(int)
 		{
-			const_tree_iterator _temp = *this;
+			_Self _temp = *this;
 			_M_node = tree_decrement(_M_node);
 			return _temp;
 		}
 
-		bool operator!=(const _Self &_x)
+		bool operator!=(const _Self &_x) const
 		{
 			return _x._M_node != _M_node;
 		}
 
-		bool operator==(const _Self &_x)
+		bool operator==(const _Self &_x) const
 		{
 			return _x._M_node == _M_node;
 		}

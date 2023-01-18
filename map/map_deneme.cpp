@@ -134,7 +134,6 @@ int main()
 	std::map<char,int> mymap;
 	std::map<char,int> mymap2;
 	ft::map<char, int> tmp;
-	typedef ft::pair<char,int> pr;
 	tmp.insert(ft::pair<char, int>('c', 100));
 	tmp.insert(ft::pair<char, int>('b', 200));
 	tmp.insert(ft::pair<char, int>('a', 300));
@@ -153,14 +152,18 @@ int main()
 	// it++;
 	// it++;
 	it = tmp2.insert(it, ft::pair<char, int>('z', 900));
-	std::cout << "it : " << it._M_node->data.first << std::endl;
+	std::cout << "it : " << it->first << std::endl;
+	
 	//print_tree(tmp2._M_t._tree, "root");
 	tmp2['e'];
 	for (ft::map<char, int>::iterator it = tmp2.begin(); it != tmp2.end(); it++)
 	{
-		std::cout << it._M_node->data.first << std::endl;
+		std::cout << it->first << std::endl;
 	}
-	print_tree(tmp2._M_t._tree, "root");
+	ft::map<char, int>::const_iterator cit = tmp2.begin();
+	++cit;
+	std::cout << cit->first << std::endl;
+	//print_tree(tmp2._M_t._tree, "root");
 	// std::cout << "-----------------------\n";
 	// print_tree(tmp._M_t._tree, "root");
 	//std::cout << "at : "<<tmp2.at('B') << std::endl;
@@ -173,7 +176,7 @@ int main()
 	mymap['B'] = 700;
 	mymap['C'] = 800;
 	std::map<char,int>::iterator i1;
-	i1 = mymap.insert(mymap.begin(), std::pair<char,int>('z',900) );
+	i1 = mymap.insert(mymap.begin(), std::pair<char,int>('z',900) );;
 	std::cout << "i1 : "<<i1->first << std::endl;
 	mymap['e'] = 10;
   	// // mymap['e'] = 500;
@@ -193,8 +196,14 @@ int main()
 	 for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
     	std::cout << it->first << " => " << it->second << '\n';
 
-	tmp2.clear();
+	std::cout << "bound "<< tmp2.lower_bound('.')->first << std::endl;
+	std::cout << "bound "<< mymap.lower_bound('.')->first << std::endl;
+	//print_tree(tmp2._M_t._tree, "before clear");
+	//std::cout << tmp2.erase('.') << std::endl;
+	//print_tree(tmp2._M_t._tree, "after clear");
 	// std::cout << "------------------\n";
 	//  for (std::map<char,int>::iterator it=mymap2.begin(); it!=mymap2.end(); it++)
     // 	std::cout << it->first << " => " << it->second << '\n';
+ 
+    // insert elements in random order
 }
