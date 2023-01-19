@@ -32,7 +32,7 @@ int		main(void)
 	cmp(mp2, mp1); // 3
 
 	(++(++mp1.begin()))->second = 42;
-
+	std::cout <<(++(++mp1.begin()))->first <<(++(++mp1.begin()))->second << std::endl;
 	cmp(mp1, mp2); // 4
 	cmp(mp2, mp1); // 5
 

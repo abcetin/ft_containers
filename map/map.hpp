@@ -238,34 +238,34 @@ namespace ft
 			value_compare value_comp() const { return value_compare(key_compare()); }
 
 			template<typename _K1, typename _T1, typename _C1, typename _A1>
-        	friend bool operator==(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
+        	friend bool operator==(const ft::map<_K1, _T1, _C1, _A1>&, const ft::map<_K1, _T1, _C1, _A1>&);
 
 			template<typename _K1, typename _T1, typename _C1, typename _A1>
-	        friend bool operator<(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
+	        friend bool operator<(const ft::map<_K1, _T1, _C1, _A1>&, const ft::map<_K1, _T1, _C1, _A1>&);
 	};
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-	bool operator==(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
+	bool operator==(const ft::map<_Key, _Tp, _Compare, _Alloc>& __x, const ft::map<_Key, _Tp, _Compare, _Alloc>& __y)
 	{ return __x._M_t == __y._M_t; }
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-	bool operator<(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
+	bool operator<(const ft::map<_Key, _Tp, _Compare, _Alloc>& __x, const ft::map<_Key, _Tp, _Compare, _Alloc>& __y)
     { return __x._M_t < __y._M_t; }
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    bool operator!=(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
+    bool operator!=(const ft::map<_Key, _Tp, _Compare, _Alloc>& __x, const ft::map<_Key, _Tp, _Compare, _Alloc>& __y)
     { return !(__x == __y); }
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    bool operator>(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
+    bool operator>(const ft::map<_Key, _Tp, _Compare, _Alloc>& __x, const ft::map<_Key, _Tp, _Compare, _Alloc>& __y)
     { return __y < __x; }
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    bool operator<=(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
+    bool operator<=(const ft::map<_Key, _Tp, _Compare, _Alloc>& __x, const ft::map<_Key, _Tp, _Compare, _Alloc>& __y)
     { return !(__y < __x); }
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    bool operator>=(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
+    bool operator>=(const ft::map<_Key, _Tp, _Compare, _Alloc>& __x, const ft::map<_Key, _Tp, _Compare, _Alloc>& __y)
     { return !(__x < __y); }
 
 };

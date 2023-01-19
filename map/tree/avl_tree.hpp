@@ -249,44 +249,43 @@ namespace ft
 	};
 
 	template<typename _Val, typename _Compare, typename _Alloc>
-    bool operator==(const avl_tree<_Val, _Compare, _Alloc>& __x,
-	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    bool operator==(const ft::avl_tree<_Val, _Compare, _Alloc>& __x,
+	const ft::avl_tree<_Val, _Compare, _Alloc>& __y)
     {
-      return __x.size() == __y.size()
-         && ft::equal(__x.begin(), __x.end(), __y.begin());
+      return (__x.size() == __y.size() && ft::equal(__x.begin(), __x.end(), __y.begin()));
     }
 
 	template<typename _Val, typename _Compare, typename _Alloc>
-    bool operator<(const avl_tree<_Val, _Compare, _Alloc>& __x,
-	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    bool operator<(const ft::avl_tree<_Val, _Compare, _Alloc>& __x,
+	const ft::avl_tree<_Val, _Compare, _Alloc>& __y)
     {
-      return ft::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end());
+      return (ft::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end()));
     }
 
 	template<typename _Val, typename _Compare, typename _Alloc>
-    bool operator!=(const avl_tree<_Val, _Compare, _Alloc>& __x,
-	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    bool operator!=(const ft::avl_tree<_Val, _Compare, _Alloc>& __x,
+	const ft::avl_tree<_Val, _Compare, _Alloc>& __y)
     {
       return !(__x == __y);
     }
 
 	template<typename _Val, typename _Compare, typename _Alloc>
-    bool operator>(const avl_tree<_Val, _Compare, _Alloc>& __x,
-	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    bool operator>(const ft::avl_tree<_Val, _Compare, _Alloc>& __x,
+	const ft::avl_tree<_Val, _Compare, _Alloc>& __y)
     {
       return __y < __x;
     }
 
 	template<typename _Val, typename _Compare, typename _Alloc>
-    bool operator<=(const avl_tree<_Val, _Compare, _Alloc>& __x,
-	const avl_tree<_Val, _Compare, _Alloc>& __y)
+    bool operator<=(const ft::avl_tree<_Val, _Compare, _Alloc>& __x,
+	const ft::avl_tree<_Val, _Compare, _Alloc>& __y)
     {
       return !(__y < __x);
     }
 
 	template<typename _Val, typename _Compare, typename _Alloc>
-	bool operator>=(const avl_tree<_Val, _Compare, _Alloc>& __x,
-	const avl_tree<_Val, _Compare, _Alloc>& __y)
+	bool operator>=(const ft::avl_tree<_Val, _Compare, _Alloc>& __x,
+	const ft::avl_tree<_Val, _Compare, _Alloc>& __y)
     {
       return !(__x < __y);
     }
