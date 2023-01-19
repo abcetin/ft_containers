@@ -63,6 +63,8 @@ namespace ft
 		{
 			return _x._M_node == _M_node;
 		}
+
+		const _Base_ptr& base() const {return _M_node;}
 	};
 
 	template <typename _Tp>
@@ -126,6 +128,8 @@ namespace ft
 		{
 			return _x._M_node == _M_node;
 		}
+
+		const _Base_ptr& base() const {return _M_node;}
 	};
 
 	template <typename _T> bool operator==(const tree_iterator<_T>& _x, const const_tree_iterator<_T>& _y)
@@ -134,6 +138,5 @@ namespace ft
 	template <typename _T> bool operator!=(const tree_iterator<_T>& _x, const const_tree_iterator<_T>& _y)
 	{ return _x._M_node != _y._M_node; }
 }
-
 
 #endif

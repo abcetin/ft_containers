@@ -65,19 +65,18 @@ namespace ft
 			}
 			else
 			{
-				temp = _node->_maximum(_node->left_node);
+				temp = _node->left_node;
 				_Val _value = temp->data;
-				_Base_ptr left = _node->left_node;
-				_Base_ptr right = _node->right_node;
 				_Base_ptr parent = _node->parent_node;
 				_node->left_node = _delete_node(_node->left_node, _value, _alloc);
+				_Base_ptr left = _node->left_node;
+				_Base_ptr right = _node->right_node;
 				_alloc.construct(_node, _value);
 				_node->parent_node = parent;
 				_node->left_node = left;
 				_node->right_node = right;
 			}
 		}
-		// std::cout << "_node " << _node->data.first << std::endl;
 		_node->height = 1 + std::max(height(_node->left_node), height(_node->right_node));
 		_node = balance(_node);
 		return _node;

@@ -77,7 +77,7 @@ namespace ft
 		else
 		{
 			_y = _x->parent_node;
-			while (_x == _y->left_node)
+			while (_y && _x == _y->left_node)
 			{
 				_x = _y;
 				_y = _y->parent_node;

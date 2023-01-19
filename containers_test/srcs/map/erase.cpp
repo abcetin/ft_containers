@@ -33,7 +33,7 @@ int		main(void)
 	printSize(mp);
 
 	ft_erase(mp, ++mp.begin());
-
+	
 	ft_erase(mp, mp.begin());
 	ft_erase(mp, --mp.end());
 

@@ -87,7 +87,10 @@ namespace ft
 
 			iterator insert( iterator pos, const value_type& value )
 			{
-				_M_t.insert(pos._M_node, value);
+				if (pos == end())
+					insert(value);
+				else
+					_M_t.insert(pos._M_node, value);
 				return iterator(_M_t.search(_M_t._tree, value));
 			}
 
@@ -155,10 +158,12 @@ namespace ft
 
 			void erase( iterator first, iterator last )
 			{
+				iterator temp;
 				while(first != last)
 				{
-					_M_t.delete_node(first._M_node->data);
+					temp = first;
 					first++;
+					_M_t.delete_node(temp._M_node->data);
 				}
 			}
 
@@ -209,7 +214,7 @@ namespace ft
 			iterator find( const Key& key )
 			{
 				iterator find = iterator(_M_t.lower_bound(ft::make_pair(key, mapped_type())));
-				return (find == end() || key_compare()(key, _M_t._tree->data.first) ? end() : find);
+				return (find == end() || key_compare()(key, find->first) ? end() : find);
 			}
 
 			const_iterator find( const Key& key ) const
@@ -231,7 +236,17 @@ namespace ft
 			key_compare key_comp() const { return key_compare(); }
 
 			value_compare value_comp() const { return value_compare(key_compare()); }
+
+			template<typename _K1, typename _T1, typename _C1, typename _A1>
+        	friend bool operator==(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
+
+			template<typename _K1, typename _T1, typename _C1, typename _A1>
+	        friend bool operator<(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
 	};
+
+	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	bool operator==(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
+	{ return __x._M_t == __y._M_t; }
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
 	bool operator<(const map<_Key, _Tp, _Compare, _Alloc>& __x, const map<_Key, _Tp, _Compare, _Alloc>& __y)
