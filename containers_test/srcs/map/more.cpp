@@ -2,17 +2,19 @@
 
 #define T1 int
 #define T2 std::string
-
-struct ft_more {
-	bool	operator()(const T1 &first, const T1 &second) const {
-		return (first > second);
+#include <map>
+struct ft_more
+{
+	constexpr bool operator()(const T1 &lhs, const T1 &rhs) const
+	{
+		return lhs > rhs; // assumes that the implementation uses a flat address space
 	}
 };
 
 typedef TESTED_NAMESPACE::map<T1, T2, ft_more> ft_mp;
-typedef TESTED_NAMESPACE::map<T1, T2, ft_more>::iterator ft_mp_it;
+typedef TESTED_NAMESPACE ::map<T1, T2, ft_more>::iterator ft_mp_it;
 
-int		main(void)
+int main(void)
 {
 	ft_mp mp;
 

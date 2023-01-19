@@ -17,6 +17,7 @@ namespace ft
 
 		typedef tree_iterator<_Tp>				_Self;
 		typedef typename node<_Tp>::_Base_ptr	_Base_ptr;
+		typedef node<_Tp>*						_Link_type;
 
 		_Base_ptr _M_node;
 
@@ -24,9 +25,9 @@ namespace ft
 
 		explicit tree_iterator(const _Base_ptr _x) : _M_node(_x) {}
 
-		reference operator*() const { return _M_node->data; }
+		reference operator*() const { return static_cast<_Link_type>(_M_node)->data; }
 
-		pointer operator->() const { return (&(operator*())); }
+		pointer operator->() const { return &_M_node->data; }
 
 		_Self& operator++()
 		{
@@ -80,6 +81,7 @@ namespace ft
 
 		typedef const_tree_iterator<value_type>					_Self;
 		typedef typename node<value_type>::_Const_Base_ptr		_Base_ptr;
+		typedef const node<_Tp>*								_Link_type;
 
 		_Base_ptr _M_node;
 
@@ -91,7 +93,7 @@ namespace ft
 
 		reference operator*() const { return _M_node->data; }
 
-		pointer operator->() const { return (&(operator*())); }
+		pointer operator->() const { return &_M_node->data;; }
 
 		_Self& operator++()
 		{
