@@ -49,11 +49,11 @@ namespace ft
 
 			normal_iterator& operator+=(const difference_type& _n) {_current += _n; return *this;}
 
-			normal_iterator operator+(const difference_type& _n) const { return normal_iterator(_current + _n);}
+			normal_iterator operator+(difference_type _n) const { return normal_iterator(_current + _n);}
 
 			normal_iterator& operator-=(const difference_type& _n) {_current -= _n; return *this;}
 
-			normal_iterator operator-(const difference_type& _n) const {return normal_iterator(_current - _n);}
+			normal_iterator operator-(difference_type _n) const {return normal_iterator(_current - _n);}
 
 			const _Iterator& base() const {return _current;}
 
@@ -89,6 +89,12 @@ namespace ft
     operator+( const ft::normal_iterator<Iterator1, _Container>& lhs,
 	const ft::normal_iterator<Iterator2, _Container>& rhs )
 	{return lhs.base() + rhs.base();}
+
+	template< typename  Iterator1, typename _Container >typename
+	ft::normal_iterator<Iterator1, _Container>
+    operator+(typename ft::normal_iterator<Iterator1, _Container>::difference_type __n,
+	const ft::normal_iterator<Iterator1, _Container>& __i)
+	{ return ft::normal_iterator<Iterator1, _Container>(__i.base() + __n); }
 
 	template< typename  Iterator1, typename  Iterator2, typename _Container>typename
 	ft::normal_iterator<Iterator1, _Container>::difference_type

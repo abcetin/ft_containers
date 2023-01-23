@@ -34,6 +34,14 @@ namespace ft
 			pointer			_end_of_capacity;
 		
 		private:
+
+			iterator move(iterator first, iterator last, iterator result)
+			{
+				for(; first != last; ++result, ++first)
+					*result = *first;
+				return result;
+			}
+
 			pointer __insert(iterator pos, size_type count, const T& value, size_type _capacity, size_type _len)
 			{
 				pointer temp;
@@ -59,7 +67,8 @@ namespace ft
 
 				temp = __insert(pos, count, _value, _capacity, _len);
 				clear();
-				this->_allocator_type.deallocate(this->_start, capacity());
+				if (capacity())
+					this->_allocator_type.deallocate(this->_start, capacity());
 				this->_start = temp;
 				this->_finish = this->_start + _len;
 				this->_end_of_capacity = this->_start + _capacity;
@@ -78,16 +87,21 @@ namespace ft
             explicit vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()): 
 			_allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0) //
 			{
-				size_type i;
-				this->_start = this->_allocator_type.allocate(count);
-				this->_finish = this->_start;
-				this->_end_of_capacity = this->_start + count;
-				i = 0;
-				while(i < count)
+				size_type i = 0;
+
+				if (count > max_size())
+					throw std::length_error("Length Error");
+				if (count)
 				{
-					this->_allocator_type.construct(this->_finish, value);
-					this->_finish++;
-					i++;
+					this->_start = this->_allocator_type.allocate(count);
+					this->_finish = this->_start;
+					this->_end_of_capacity = this->_start + count;
+					while(i < count)
+					{
+						this->_allocator_type.construct(this->_finish, value);
+						this->_finish++;
+						i++;
+					}
 				}
 			}
 
@@ -106,28 +120,12 @@ namespace ft
 			template<typename InputIt> vector(InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!is_integral<InputIt>::value, bool>::type = true) :
 			_allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0)
 			{
-				size_type len = 0;
-				InputIt it = first;
-				while (first != last)
-				{
-					first++;
-					len++;
-				}
-				first = it;
-				this->_start = this->_allocator_type.allocate(len);
-				this->_finish = this->_start;
-				this->_end_of_capacity = this->_start + len;
-				while(first != last)
-				{
-					this->_allocator_type.construct(this->_finish, *first);
-					first++;
-					this->_finish++;
-				}
+				assign(first, last);
 			}
 
             ~vector()
 			{
-				if (_start)
+				if (capacity())
 				{
 					clear();
 					this->_allocator_type.deallocate(this->_start, capacity());
@@ -149,7 +147,8 @@ namespace ft
 							temp_finish++;
 						}
 						clear();
-						this->_allocator_type.deallocate(this->_start, capacity());
+						if (capacity())
+							this->_allocator_type.deallocate(this->_start, capacity());
 						this->_start = temp_start;
 						this->_finish = temp_finish;
 						this->_end_of_capacity = this->_start + len;
@@ -182,30 +181,42 @@ namespace ft
 				
 			}
 
-            template< class InputIterator > void assign( InputIterator first, InputIterator last , typename ft::enable_if<!is_integral<InputIterator>::value, bool>::type = true)
+            template< class InputIterator > void assign( InputIterator first, InputIterator last, typename ft::enable_if<!is_integral<InputIterator>::value, bool>::type = true)
 			{
-				//typename iterator_traits<InputIterator>::difference_type _first(0);
-				// while (first != last)
-				// {
-				// 	first++;
-				// 	len++;
-				// }
-				// first = it;
-				difference_type _len = 7;
-				clear();
-				if (_len > (difference_type)capacity())
+				typedef typename std::iterator_traits<InputIterator>::iterator_category iter;
+				if (ft::__are_same<iter, std::random_access_iterator_tag>::__value)
 				{
-					if (capacity())
-						this->_allocator_type.deallocate(this->_start, capacity());
-					this->_start = this->_allocator_type.allocate(_len);
-					this->_finish = this->_start;
-					this->_end_of_capacity = this->_start + _len;
+					difference_type _len = std::distance(first, last);
+					clear();
+					if (_len > (difference_type)capacity())
+					{
+						if (capacity())
+							this->_allocator_type.deallocate(this->_start, capacity());
+						this->_start = this->_allocator_type.allocate(_len);
+						this->_finish = this->_start;
+						this->_end_of_capacity = this->_start + _len;
+					}
+					while(first != last)
+					{
+						this->_allocator_type.construct(this->_finish, *first);
+						first++;
+						this->_finish++;
+					}	
 				}
-				while(first != last)
+				else
 				{
-					this->_allocator_type.construct(this->_finish, *first);
-					first++;
-					this->_finish++;
+					iterator pos(begin());
+
+					while ((pos != end()) && (first != last))
+					{
+						*pos = *first;
+						++first;
+						++pos;
+					}
+					if (first == last)
+						erase(pos, end());
+					else
+						insert(end(), first, last);
 				}
 			}
 
@@ -274,7 +285,8 @@ namespace ft
 							this->_allocator_type.construct(temp + i, this->_start[i]);
 							this->_allocator_type.destroy(this->_start + i);
 						}
-						this->_allocator_type.deallocate(this->_start, capacity());
+						if (capacity())
+							this->_allocator_type.deallocate(this->_start, capacity());
 						this->_start = temp;
 						this->_finish = this->_start + _size;
 						this->_end_of_capacity = this->_start + new_cap;
@@ -307,8 +319,7 @@ namespace ft
 				if (this->_finish != this->_end_of_capacity)
 				{
 					_len = size() + 1;
-					_capacity = capacity();
-					_insert_base(pos, 1, _len, _capacity, _value);
+					_insert_base(pos, 1, _len, capacity(), _value);
 				}
 				else if (capacity() && this->_finish == this->_end_of_capacity)
 				{
@@ -334,12 +345,14 @@ namespace ft
 				size_type _new_pos = size_type(pos - begin());
 				size_type _capacity;
 				size_type _len;
-
+				if (count > max_size())
+					throw std::length_error("Length Error");
+				if (count == 0)
+					return pos;
 				if (capacity() && size_type((this->_finish + count) - this->_start) < capacity())
 				{
 					_len = size() + count;
-					_capacity = capacity();
-					_insert_base(pos, count, _len, _capacity, value);
+					_insert_base(pos, count, _len, capacity(), value);
 				}
 				else if (capacity() && size_type((this->_finish + count) - this->_start) >= capacity())
 				{
@@ -351,7 +364,7 @@ namespace ft
 						_capacity = capacity() * 2;
 					_insert_base(pos, count, _len, _capacity, value);
 				}
-				else if (!capacity())
+				else
 				{
 					this->_start = this->_allocator_type.allocate(count);
 					this->_finish = this->_start;
@@ -380,38 +393,21 @@ namespace ft
             iterator erase( iterator pos ) 
 			{
 				if (pos + 1 != end())
-				{
-					for (iterator i = begin(); i < end(); i++)
-					{
-						if (i >= pos) 
-							std::swap(*i, *(i + 1));
-					}
-				}
+					move(pos + 1, end(), pos);
 				this->_finish--;
-				this->_allocator_type.destroy(this->_start + size_type(pos - begin()));
+				this->_allocator_type.destroy(this->_finish);
 				return(pos);
 			}
 
             iterator erase(iterator first, iterator last) 
 			{
-				if (first != last && size_type((last + 1) - begin()) < size_type(end() - begin()))
+				if (first != last)
 				{
-					for (iterator i = begin(); i != end(); i++)
-					{
-						if (size_type(i - begin()) >= size_type(last - first) && size_type(i - begin()) <= size_type(last - first))
-							this->_allocator_type.destroy(this->_start + size_type(i - begin()));
-						std::swap(*i, *(i + size_type(last - first)));
-					}
-					this->_finish -= size_type(last - first);
-				}
-				else
-				{
-					for (iterator it = first; it != last; it++)
-					{
-						this->_allocator_type.destroy(this->_start + (last - it));
-						std::swap(*(begin() + size_type(last - it)), *(begin() + + size_type(last - it) + 1));
-						this->_finish--;
-					}
+					size_type len = (last - first);
+					if (last != end())
+						move(last, end(), first);
+					for (size_type i = 0; i < len; i++)
+						pop_back();
 				}
 				return (first);
 			}
@@ -429,8 +425,8 @@ namespace ft
 
             void pop_back()
 			{
+				--this->_finish;
 				this->_allocator_type.destroy(this->_finish);
-				this->_finish--;
 			}
 
             void resize( size_type count, T value = T()) 

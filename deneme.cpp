@@ -17,11 +17,13 @@ int main()
 
 	it1 = a.begin();
 	it = b.begin();
+
 	std::cout << a.size() <<" "<< a.capacity() << std::endl;
 	std::cout << b.size() << " " << b.capacity()<< std::endl;
 
 	a.assign(64, 'A');
 	b.assign(64, 'A');
+	std::cout << *(42 + it1) << std::endl;
 	std::cout << a.size() <<" "<< a.capacity() << std::endl;
 	std::cout << b.size() << " " << b.capacity()<< std::endl;
 
