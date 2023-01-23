@@ -1,7 +1,7 @@
 NAME	= ft_containers
 CC		= c++
 CFLAGS	= -Wall -Wextra -Werror -std=c++98
-SRC		= $(shell find . -type f -name "*.cpp")
+SRC		= $(shell find . -type f -name "main.cpp")
 OBJ		= $(SRC:.cpp=.o)
 
 all : $(NAME)

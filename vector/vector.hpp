@@ -6,6 +6,7 @@
 #include "../utils/normal_iterator.hpp"
 #include "../utils/enable_if.hpp"
 #include "../utils/reverse_iterator.hpp"
+#include <iterator>
 
 namespace ft
 {
@@ -106,10 +107,13 @@ namespace ft
 			_allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0)
 			{
 				size_type len = 0;
-				InputIt temp = first;
-				
-				for(; temp != last; temp++)
+				InputIt it = first;
+				while (first != last)
+				{
+					first++;
 					len++;
+				}
+				first = it;
 				this->_start = this->_allocator_type.allocate(len);
 				this->_finish = this->_start;
 				this->_end_of_capacity = this->_start + len;
@@ -164,7 +168,8 @@ namespace ft
 				clear();
 				if (count > capacity())
 				{
-					this->_allocator_type.deallocate(this->_start, this->capacity());
+					if (capacity())
+						this->_allocator_type.deallocate(this->_start, this->capacity());
 					this->_start = this->_allocator_type.allocate(count);
 					this->_finish = _start;
 					this->_end_of_capacity = this->_start + count; 
@@ -179,25 +184,29 @@ namespace ft
 
             template< class InputIterator > void assign( InputIterator first, InputIterator last , typename ft::enable_if<!is_integral<InputIterator>::value, bool>::type = true)
 			{
-				difference_type len = 0;
-				InputIterator temp = first;
-
-				for (; temp != last; temp++)
-					len++;				
+				//typename iterator_traits<InputIterator>::difference_type _first(0);
+				// while (first != last)
+				// {
+				// 	first++;
+				// 	len++;
+				// }
+				// first = it;
+				difference_type _len = 7;
 				clear();
-				if (len > (difference_type)capacity())
+				if (_len > (difference_type)capacity())
 				{
-					this->_allocator_type.deallocate(this->_start, capacity());
-					this->_start = this->_allocator_type.allocate(len);
+					if (capacity())
+						this->_allocator_type.deallocate(this->_start, capacity());
+					this->_start = this->_allocator_type.allocate(_len);
 					this->_finish = this->_start;
-					this->_end_of_capacity = this->_start + len;
+					this->_end_of_capacity = this->_start + _len;
 				}
-				for (size_t i = 0; i < (size_t)len; i++)
+				while(first != last)
 				{
-					this->_allocator_type.construct(this->_start + i, *(first));
+					this->_allocator_type.construct(this->_finish, *first);
 					first++;
+					this->_finish++;
 				}
-				this->_finish = this->_start + len;
 			}
 
             allocator_type get_allocator() const{ return this->_allocator_type;}
@@ -356,7 +365,9 @@ namespace ft
 				return iterator(this->_start + _new_pos);
 			}
 
-            template< class InputIt > iterator insert(iterator pos, InputIt first, InputIt last, typename ft::enable_if<!is_integral<InputIt>::value, bool>::type = true) //
+            template< class InputIt >
+			iterator insert(iterator pos, InputIt first, InputIt last,
+			typename ft::enable_if<!is_integral<InputIt>::value, bool>::type = true)
 			{
 				for (; first != last; first++)
 				{
@@ -438,7 +449,7 @@ namespace ft
 				}
 			}
 
-            void swap( vector& other ) //
+            void swap( vector& other )
 			{
 				std::swap(this->_start, other._start);
 				std::swap(this->_finish, other._finish);

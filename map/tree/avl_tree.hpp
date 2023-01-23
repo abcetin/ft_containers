@@ -123,23 +123,22 @@ namespace ft
 				return _node;
 			}
 
+			void _M_erase(_Base_ptr _x)
+			{
+				if (_x)
+				{
+					_M_erase(_x->left_node);
+					_M_erase(_x->right_node);
+					this->_allocator.destroy(_x);
+					this->_allocator.deallocate(_x, 1);
+				}	
+			}
+
 			void clear() 
 			{
-				if (!_tree)
-					return;
-				iterator first = this->begin();
-				iterator temp;
-				while(first != end())
-				{
-					temp = first;
-					first++;
-					_allocator.destroy(temp._M_node);
-					_allocator.deallocate(temp._M_node, 1);
-				}
-				_tree->left_node = _end;
-				_tree->right_node = _end;
-				_tree = _end;
+				_M_erase(_tree);
 				_count = 0;
+				_tree = _end;
 			}
 
 			int get_balance() { return _get_balance(this->_tree); }
@@ -247,10 +246,7 @@ namespace ft
 
 			~avl_tree()
 			{
-				clear();
-				_allocator.destroy(_end);
-				_allocator.deallocate(_end, 1);
-				_end = NULL;
+				_M_erase(_tree);
 			}
 	};
 
