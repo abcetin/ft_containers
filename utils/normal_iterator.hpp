@@ -4,13 +4,14 @@
 #include "utils.h"
 #include "iterator_traits.hpp"
 #include "enable_if.hpp"
+#include <iterator>
 
 namespace ft
 {
 	//__are_same Türlerin eşitliği için.
 
 	template <typename _Iterator, typename _Container>
-	class normal_iterator
+	class normal_iterator : public std::iterator<std::random_access_iterator_tag, void, void, void, void>
 	{
 		protected:
 			_Iterator _current;

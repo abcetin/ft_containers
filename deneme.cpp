@@ -22,8 +22,8 @@ int main()
 	// std::cout << a.size() <<" "<< a.capacity() << std::endl;
 	// std::cout << b.size() << " " << b.capacity()<< std::endl;
 
-	// a.assign(64, 'A');
-	//b.assign(10, 'A');
+	a.assign(64, 'A');
+	b.assign(64, 'A');
 	// std::cout << *(42 + it1) << std::endl;
 	// std::cout << a.size() <<" "<< a.capacity() << std::endl;
 	// std::cout << b.size() << " " << b.capacity()<< std::endl;
@@ -56,11 +56,12 @@ int main()
 	// std::cout << j << std::endl;
 	
 	// std::stack<int> v;
-	int i = 0;
-	while(i < 536870911)
-	{i++;}
-	std::cout << "aaaa\n";
-	
+	typedef typename std::iterator_traits<std::vector<int>::iterator>::iterator_category it;
+	typedef typename std::iterator_traits<ft::vector<int>::iterator>::iterator_category it1;
+	std::cout << std::__are_same<it, std::output_iterator_tag>::__value << std::endl;
+	std::cout << std::__are_same<it1, std::output_iterator_tag>::__value << std::endl;
+	std::cout << (a.end() - a.begin()) << std::endl;
+	std::cout << (b.end() - b.begin()) << std::endl;
 }
 
 // size_type len = end() - pos;

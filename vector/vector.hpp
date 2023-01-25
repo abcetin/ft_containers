@@ -37,13 +37,37 @@ namespace ft
 			pointer			_end_of_capacity;
 		
 		private:
-			void _destroy()
+
+			template< class randIt >
+			void _insert(iterator pos, randIt first, randIt last, std::random_access_iterator_tag)
 			{
-				if (capacity())
+				if (first == last)
+					return;
+				size_type len = (last - first);
+				size_type oldCap = capacity();
+				size_type newCap = !oldCap ? len : size() + len;
+				pointer newData = this->_allocator_type.allocate(newCap);
+				pointer newEnd = newData;
+				for(iterator it = begin(); it != pos; it++, newEnd++)
+						this->_allocator_type.construct(newEnd, *it);
+				for(; first != last; first++, newEnd++)
+					this->_allocator_type.construct(newEnd, *first);
+				for(iterator it = pos; it != end(); it++, newEnd++)
+					this->_allocator_type.construct(newEnd, *it);
+				if (oldCap)
 				{
 					clear();
-					this->_allocator_type.deallocate(this->_start, capacity());
+					this->_allocator_type.deallocate(this->_start, oldCap);
 				}
+				this->_start = newData;
+				this->_finish = newEnd;
+				this->_end_of_capacity = this->_start + newCap;
+			}
+			template< class InputIt >
+			void _insert(iterator pos, InputIt first, InputIt last, std::input_iterator_tag)
+			{
+				for(; first != last; first++, pos++)
+					pos = insert(pos, *first);
 			}
 
 			iterator move(iterator first, iterator last, iterator result)
@@ -357,37 +381,7 @@ namespace ft
 				_insert(pos, first, last, iter());
 				return pos;
 			}
-			template< class randIt >
-			void _insert(iterator pos, randIt first, randIt last, std::random_access_iterator_tag)
-			{
-				if (first == last)
-					return;
-				size_type len = (last - first);
-				size_type oldCap = capacity();
-				size_type newCap = size() + len > capacity() ? capacity() * 2 : capacity();
-				pointer newData = this->_allocator_type.allocate(newCap);
-				pointer newEnd = newData;
-				for(iterator it = begin(); it != pos; it++, newEnd++)
-					this->_allocator_type.construct(newEnd, *it);
-				for(; first != last; first++, newEnd++)
-					this->_allocator_type.construct(newEnd, *first);
-				for(iterator it = pos; it != end(); it++, newEnd++)
-					this->_allocator_type.construct(newEnd, *it);
-				if (oldCap)
-				{
-					clear();
-					this->_allocator_type.deallocate(this->_start, oldCap);
-				}
-				this->_start = newData;
-				this->_finish = newEnd;
-				this->_end_of_capacity = this->_start + newCap;
-			}
-			template< class InputIt >
-			void _insert(iterator pos, InputIt first, InputIt last, std::input_iterator_tag)
-			{
-				for(; first != last; first++, pos++)
-					pos = insert(pos, *first);
-			}
+			
             iterator erase( iterator pos ) 
 			{
 				if (pos + 1 != end())
