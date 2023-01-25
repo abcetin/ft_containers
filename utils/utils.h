@@ -52,5 +52,6 @@ namespace ft
 		};
 		typedef ft::true_type __type;
 	};
+
 };
 #endif

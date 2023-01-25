@@ -8,7 +8,8 @@
 #include "../utils/reverse_iterator.hpp"
 #include <iterator>
 #include <algorithm>
-
+#include <memory>
+#include <limits>
 
 namespace ft
 {
@@ -292,27 +293,34 @@ namespace ft
             iterator insert(iterator pos, const T& _value)
 			{
 				size_type _new_pos = size_type(pos - begin());
-				if (!capacity())
+				if (this->_finish != this->_end_of_capacity && pos == end())
+					this->_allocator_type.construct(this->_finish++, _value);
+				else if (size() + 1 < capacity())
 				{
-					this->_start = this->_allocator_type.allocate(1);
-					this->_finish = this->_start;
-					this->_allocator_type.construct(this->_finish, _value);
-					this->_finish++;
-					this->_end_of_capacity = this->_start + 1;
-					return (iterator(this->_start));
+					size_type _pos = (end() - pos);
+					this->_allocator_type.construct(this->_finish++, _value);
+					std::swap_ranges(rbegin(), rbegin() + _pos, rbegin() + 1);
 				}
-				else if (pos == end())
-					push_back(_value);
 				else
 				{
-					size_type _pos = (pos - begin());
-					if (this->_finish == this->_end_of_capacity)
-						reserve(capacity() * 2);
-					this->_allocator_type.construct(this->_finish, *(this->_finish - 1));
-					std::move_backward(begin() + _pos, end() - 1, end());
-					this->_allocator_type.destroy(this->_start + _pos);
-					this->_allocator_type.construct(this->_start + _pos, _value);
-					this->_finish++;
+					size_type oldCap = capacity();
+					size_type newSize = size() ? oldCap * 2 : 1;
+					pointer newData = this->_allocator_type.allocate(newSize);
+					pointer newEnd = newData;
+
+					for(iterator it = begin(); it != pos; it++, newEnd++)
+						this->_allocator_type.construct(newEnd, *it);
+					this->_allocator_type.construct(newEnd++, _value);
+					for(iterator it = pos; it != end(); it++, newEnd++)
+						this->_allocator_type.construct(newEnd, *it);
+					if (oldCap)
+					{
+						clear();
+						this->_allocator_type.deallocate(this->_start, oldCap);
+					}
+					this->_start = newData;
+					this->_finish = newEnd;
+					this->_end_of_capacity = this->_start + newSize;
 				}
 				return iterator(this->_start + _new_pos);
 			}
@@ -345,30 +353,41 @@ namespace ft
 			iterator insert(iterator pos, InputIt first, InputIt last,
 			typename ft::enable_if<!is_integral<InputIt>::value, bool>::type = true)
 			{
-				if (ft::__are_same<InputIt, std::random_access_iterator_tag>::__value)
-				{
-					size_type count = std::distance(first, last);
-					size_type len = end() - pos;
-					size_type _size = size();
-					if (size() + count > capacity())
-					{
-						if (size() + count > capacity() * 2)
-							reserve(size() + count);
-						else
-							reserve(capacity() * 2);
-					}
-					std::uninitialized_copy(first, last, this->_finish);
-					if (_size)
-						std::swap_ranges(rbegin(), rbegin() + len, rbegin() + count);
-				}
-				else
-				{
-					for (; first != last; first++, pos++)
-						pos = insert(pos, *first);
-				}
+			 	typedef typename std::iterator_traits<InputIt>::iterator_category iter;
+				_insert(pos, first, last, iter());
 				return pos;
 			}
-
+			template< class randIt >
+			void _insert(iterator pos, randIt first, randIt last, std::random_access_iterator_tag)
+			{
+				if (first == last)
+					return;
+				size_type len = (last - first);
+				size_type oldCap = capacity();
+				size_type newCap = size() + len > capacity() ? capacity() * 2 : capacity();
+				pointer newData = this->_allocator_type.allocate(newCap);
+				pointer newEnd = newData;
+				for(iterator it = begin(); it != pos; it++, newEnd++)
+					this->_allocator_type.construct(newEnd, *it);
+				for(; first != last; first++, newEnd++)
+					this->_allocator_type.construct(newEnd, *first);
+				for(iterator it = pos; it != end(); it++, newEnd++)
+					this->_allocator_type.construct(newEnd, *it);
+				if (oldCap)
+				{
+					clear();
+					this->_allocator_type.deallocate(this->_start, oldCap);
+				}
+				this->_start = newData;
+				this->_finish = newEnd;
+				this->_end_of_capacity = this->_start + newCap;
+			}
+			template< class InputIt >
+			void _insert(iterator pos, InputIt first, InputIt last, std::input_iterator_tag)
+			{
+				for(; first != last; first++, pos++)
+					pos = insert(pos, *first);
+			}
             iterator erase( iterator pos ) 
 			{
 				if (pos + 1 != end())

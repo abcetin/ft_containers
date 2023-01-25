@@ -45,17 +45,22 @@ int main()
 	// for (std::size_t i = 0; i < 10000; ++i) {
     //       b.insert(b.begin(), 5, -1);
     //     }
-	b.push_back(1);
-	b.insert(b.begin(), 5, -1);
-	int j = 0;
-	for (ft::vector<int>::iterator i = b.begin(); i != b.end(); i++)
-	{
-		std::cout << *i << std::endl;
-		j++;
-	}
-	std::cout << j << std::endl;
+	// b.push_back(1);
+	// b.insert(b.begin(), 5, -1);
+	// int j = 0;
+	// for (ft::vector<int>::iterator i = b.begin(); i != b.end(); i++)
+	// {
+	// 	std::cout << *i << std::endl;
+	// 	j++;
+	// }
+	// std::cout << j << std::endl;
 	
-	std::stack<int> v;
+	// std::stack<int> v;
+	int i = 0;
+	while(i < 536870911)
+	{i++;}
+	std::cout << "aaaa\n";
+	
 }
 
 // size_type len = end() - pos;
