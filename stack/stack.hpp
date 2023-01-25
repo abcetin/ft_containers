@@ -26,11 +26,11 @@ namespace ft
 			Container c;
 		
 		public:
-			//stack() {}
+			stack() {}
 
-			//stack(const stack& other) : c(other.c) {}
+			stack(const stack& other) : c(other.c) {}
 
-			explicit stack(const Container& __c = Container()): c(__c){}
+			//explicit stack( const Container& cont = Container() ) : c(cont) {}
 
 			stack& operator=( const stack& other ){ c = other.c; return *this;}
 

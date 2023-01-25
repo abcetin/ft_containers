@@ -2,6 +2,7 @@
 #include <iterator>
 #include <iostream>
 #include "vector/vector.hpp"
+#include <stack>
 // #include "utils/random_access_iterator.hpp"
 
 int main()
@@ -54,7 +55,7 @@ int main()
 	}
 	std::cout << j << std::endl;
 	
-	
+	std::stack<int> v;
 }
 
 // size_type len = end() - pos;

@@ -6,53 +6,53 @@
 
 int main()
 {		
-	std::map<char,int> mymap;
-	std::map<char,int> mymap2;
-	ft::map<char, int> tmp;
-	tmp.insert(ft::pair<char, int>('c', 100));
-	tmp.insert(ft::pair<char, int>('b', 200));
-	tmp.insert(ft::pair<char, int>('a', 300));
-	tmp.insert(ft::pair<char, int>('d', 400));
-	tmp.insert(ft::pair<char, int>('p', 500));
-	tmp.insert(ft::pair<char, int>('A', 600));
-	tmp.insert(ft::pair<char, int>('B', 700));
-	tmp.insert(ft::pair<char, int>('C', 800));
-	ft::map<char, int> tmp2;
-	tmp2 = tmp;
-	ft::map<char, int>::iterator it = tmp2.begin();
-	// it++;
-	// it++;
-	// it++;
-	// it++;
-	// it++;
-	// it++;
-	it = tmp2.insert(it, ft::pair<char, int>('z', 900));
-	std::cout << "it : " << it->first << std::endl;
-	//print_tree(tmp2._M_t._tree, "root");
-	tmp2['e'] = 10;
-	int i = 0;
-	tmp2.size();
-	for (ft::map<char, int>::iterator it = tmp2.begin(); it != tmp2.end(); it++)
-	{
-		i++;
-		std::cout << it->first << std::endl;
-	}
+	// std::map<char,int> mymap;
+	// std::map<char,int> mymap2;
+	// ft::map<char, int> tmp;
+	// tmp.insert(ft::pair<char, int>('c', 100));
+	// tmp.insert(ft::pair<char, int>('b', 200));
+	// tmp.insert(ft::pair<char, int>('a', 300));
+	// tmp.insert(ft::pair<char, int>('d', 400));
+	// tmp.insert(ft::pair<char, int>('p', 500));
+	// tmp.insert(ft::pair<char, int>('A', 600));
+	// tmp.insert(ft::pair<char, int>('B', 700));
+	// tmp.insert(ft::pair<char, int>('C', 800));
+	// ft::map<char, int> tmp2;
+	// tmp2 = tmp;
+	// ft::map<char, int>::iterator it = tmp2.begin();
+	// // it++;
+	// // it++;
+	// // it++;
+	// // it++;
+	// // it++;
+	// // it++;
+	// it = tmp2.insert(it, ft::pair<char, int>('z', 900));
+	// std::cout << "it : " << it->first << std::endl;
+	// //print_tree(tmp2._M_t._tree, "root");
+	// tmp2['e'] = 10;
+	// int i = 0;
+	// tmp2.size();
+	// for (ft::map<char, int>::iterator it = tmp2.begin(); it != tmp2.end(); it++)
+	// {
+	// 	i++;
+	// 	std::cout << it->first << std::endl;
+	// }
 	//print_tree(tmp2._M_t._tree, "root");
 	// std::cout << "-----------------------\n";
 	// print_tree(tmp._M_t._tree, "root");
 	//std::cout << "at : "<<tmp2.at('B') << std::endl;
-  	mymap['c'] = 100;
-  	mymap['b'] = 200;
-  	mymap['a'] = 300;
-	mymap['d'] = 400;
-	mymap['p'] = 500;
-	mymap['A'] = 600;
-	mymap['B'] = 700;
-	mymap['C'] = 800;
-	std::map<char,int>::iterator i1;
-	i1 = mymap.insert(mymap.begin(), std::pair<char,int>('z',900) );;
-	std::cout << "i1 : "<<i1->first << std::endl;
-	mymap['e'] = 10;
+  	// mymap['c'] = 100;
+  	// mymap['b'] = 200;
+  	// mymap['a'] = 300;
+	// mymap['d'] = 400;
+	// mymap['p'] = 500;
+	// mymap['A'] = 600;
+	// mymap['B'] = 700;
+	// mymap['C'] = 800;
+	// std::map<char,int>::iterator i1;
+	// i1 = mymap.insert(mymap.begin(), std::pair<char,int>('z',900) );;
+	// std::cout << "i1 : "<<i1->first << std::endl;
+	// mymap['e'] = 10;
   	// // mymap['e'] = 500;
   	// // mymap['f'] = 600;
 	// // mymap['g'] = 700;
@@ -67,19 +67,19 @@ int main()
 
 	// // for (std::map<char,int>::iterator it=mymap.end(); it!=mymap.begin(); --it)
    	// // 	std::cout << it->first << " => " << it->second << '\n';
-	ft::map<char, int> tmp3;
-	tmp3['a'] = 100;
-	//tmp3.insert(tmp2.begin(), tmp2.end());
-	 for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
-    	std::cout << "std " << it->first << " => " << it->second << '\n';
-	std::cout << "---------------------\n";
-	for (ft::map<char,int>::iterator it=tmp2.begin(); it!=tmp2.end(); it++)
-    	std::cout <<"ft tmp2 " << it->first << " => " << it->second << '\n';
-std::cout << "---------------------\n";
-	for (ft::map<char,int>::iterator it=tmp3.begin(); it!=tmp3.end(); it++)
-    	std::cout <<"ft tmp3 " << it->first << " => " << it->second << '\n';
-	std::cout << "tmp "<< tmp2.max_size() << std::endl;
-	std::cout << "mymap "<< mymap.max_size() << std::endl;
+// 	ft::map<char, int> tmp3;
+// 	tmp3['a'] = 100;
+// 	//tmp3.insert(tmp2.begin(), tmp2.end());
+// 	 for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
+//     	std::cout << "std " << it->first << " => " << it->second << '\n';
+// 	std::cout << "---------------------\n";
+// 	for (ft::map<char,int>::iterator it=tmp2.begin(); it!=tmp2.end(); it++)
+//     	std::cout <<"ft tmp2 " << it->first << " => " << it->second << '\n';
+// std::cout << "---------------------\n";
+// 	for (ft::map<char,int>::iterator it=tmp3.begin(); it!=tmp3.end(); it++)
+//     	std::cout <<"ft tmp3 " << it->first << " => " << it->second << '\n';
+// 	std::cout << "tmp "<< tmp2.max_size() << std::endl;
+// 	std::cout << "mymap "<< mymap.max_size() << std::endl;
 	//print_tree(tmp2._M_t._tree, "before clear");
 	//std::cout << tmp2.erase('.') << std::endl;
 	//print_tree(tmp2._M_t._tree, "after clear");
@@ -88,4 +88,7 @@ std::cout << "---------------------\n";
     // 	std::cout << it->first << " => " << it->second << '\n';
  
     // insert elements in random order
+	ft::map<int, char> a;
+	ft::map<int, char> b;
+	a = b;
 }

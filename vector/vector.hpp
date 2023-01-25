@@ -7,6 +7,7 @@
 #include "../utils/enable_if.hpp"
 #include "../utils/reverse_iterator.hpp"
 #include <iterator>
+#include <algorithm>
 
 
 namespace ft
@@ -247,7 +248,7 @@ namespace ft
 
             size_type size() const {return size_type(this->_finish - this->_start);}
 
-            size_type max_size() const{return this->_allocator_type.max_size();}
+            size_type max_size() const{return std::min<size_type>(this->_allocator_type.max_size(), std::numeric_limits<difference_type>::max());}
 
             void reserve( size_type new_cap )
 			{
@@ -283,8 +284,7 @@ namespace ft
 
             void clear()
 			{
-				size_type _size = size();
-				for (size_t i = 0; i < _size; i++)
+				for (size_t i = 0; i < size(); i++)
 					this->_allocator_type.destroy(&this->_start[i]);
 				this->_finish = this->_start;
 			}
@@ -302,18 +302,17 @@ namespace ft
 					return (iterator(this->_start));
 				}
 				else if (pos == end())
-				{
-					if (this->_finish == this->_end_of_capacity)
-						reserve(capacity() * 2); 
 					push_back(_value);
-				}
 				else
 				{
-					size_type len = end() - pos;
+					size_type _pos = (pos - begin());
 					if (this->_finish == this->_end_of_capacity)
 						reserve(capacity() * 2);
-					push_back(_value);
-					std::swap_ranges(rbegin(), rbegin() + len, rbegin() + 1);
+					this->_allocator_type.construct(this->_finish, *(this->_finish - 1));
+					std::move_backward(begin() + _pos, end() - 1, end());
+					this->_allocator_type.destroy(this->_start + _pos);
+					this->_allocator_type.construct(this->_start + _pos, _value);
+					this->_finish++;
 				}
 				return iterator(this->_start + _new_pos);
 			}
@@ -350,6 +349,7 @@ namespace ft
 				{
 					size_type count = std::distance(first, last);
 					size_type len = end() - pos;
+					size_type _size = size();
 					if (size() + count > capacity())
 					{
 						if (size() + count > capacity() * 2)
@@ -357,21 +357,14 @@ namespace ft
 						else
 							reserve(capacity() * 2);
 					}
-					while(first != last)
-					{
-						this->_allocator_type.construct(this->_finish, *first);
-						first++;
-						this->_finish++;
-					}
-					std::swap_ranges(rbegin(), rbegin() + len, rbegin() + count);
+					std::uninitialized_copy(first, last, this->_finish);
+					if (_size)
+						std::swap_ranges(rbegin(), rbegin() + len, rbegin() + count);
 				}
 				else
 				{
 					for (; first != last; first++, pos++)
-					{
 						pos = insert(pos, *first);
-					}
-					
 				}
 				return pos;
 			}
@@ -411,10 +404,7 @@ namespace ft
 					push_back(value);
 				}
 				else
-				{
 					insert(end(), value);
-				}
-					
 			}
 
             void pop_back()
