@@ -90,5 +90,19 @@ int main()
     // insert elements in random order
 	ft::map<int, char> a;
 	ft::map<int, char> b;
-	a = b;
+	ft::map<int, char> c;
+	for (size_t i = 0; i < 10; i++)
+	{
+		a.insert(ft::make_pair(i, i + 65));
+	}
+	b = a;
+	for (size_t i = 0; i < 10; i++)
+	{
+		c.insert(ft::make_pair(i, i + 65));
+	}
+	b = c;
+	for(ft::map<int, char>::iterator it = b.begin(); it != b.end(); it++)
+		std::cout << it->first << " " << it->second << std::endl;
+	// for(ft::map<int, char>::iterator it = a.end(); it != a.begin(); --it)
+	// 	std::cout << it->first << " " << it->second << std::endl;
 }

@@ -42,6 +42,7 @@ namespace ft
 					_M_erase(_x->right_node);
 					this->_allocator.destroy(_x);
 					this->_allocator.deallocate(_x, 1);
+					_x = NULL;
 				}	
 			}
 
@@ -49,28 +50,23 @@ namespace ft
 
 			avl_tree(): _tree(), _end(), _count(0), _key_compare(), _allocator() 
 			{ 
-				create_node(&this->_end, _Val(), _allocator);
-				create_node(&this->_tree, _Val(), _allocator);
-				_end->left_node = _tree;
+
 			}
 
 			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _tree(), _end(), _count(0), _key_compare(_comp), _allocator(_a)
 			{
-				create_node(&this->_end, _Val(), _allocator);
-				create_node(&this->_tree, _Val(), _allocator);
-				_end->left_node = _tree;
+
 			}
 
 			avl_tree (const avl_tree& _x) : _count(0), _key_compare(_x._key_compare), _allocator(_x._allocator)
 			{
-				create_node(&this->_end, _Val(), _allocator);
-				create_node(&this->_tree, _Val(), _allocator);
-				_end->left_node = _tree;
 				if (_x._tree)
 				{
-					this->_tree = _copy(this->_tree, _x._tree, this->_tree, _allocator);
+					create_node(&this->_end, _Val(), _allocator);
+					this->_tree = _copy(this->_tree, _x._tree, _end, _allocator);
 					this->_end->parent_node = _tree->_maximum(_tree);
 					this->_count = _x._count;
+					_end->left_node = _tree;
 				}
 			}
 
@@ -83,9 +79,11 @@ namespace ft
 					_allocator = _x._allocator;
 					if (_x._tree != 0)
 					{
-						_tree = _copy(_tree, _x._tree, _tree, _allocator);
+						create_node(&_end, _Val(), _allocator);
+						_tree = _copy(_tree, _x._tree, _end, _allocator);
 						_count = _x._count;
-						_tree->parent_node = _end;
+						_end->left_node = _tree;
+						_end->parent_node = _tree->_maximum(_tree);
 					}
 				}
 				return *this;
@@ -95,14 +93,15 @@ namespace ft
 
 			_Base_ptr insert(const _Val& _value)
 			{
+				if(!_end)
+					create_node(&_end, _Val(), _allocator);
 				_Base_ptr ret = search(this->_tree, _value);
 				if (!ret)
 				{
-					this->_tree = _add_with_balance(this->_tree, _value, this->_tree, value_compare(), _allocator);
+					this->_tree = _add_with_balance(this->_tree, _value, this->_end, value_compare(), _allocator);
 					_Base_ptr max = _tree->_maximum(_tree);
-					this->_tree->parent_node = this->_end;
 					this->_end->parent_node = max;
-					//this->_end->left_node = _tree;
+					this->_end->left_node = this->_tree;
 					this->_count++;
 					ret = search(this->_tree, _value);
 				}
@@ -111,21 +110,19 @@ namespace ft
 
 			void insert(_Base_ptr pos, const _Val& _value)
 			{
+				if(!_end)
+					create_node(&_end, _Val(), _allocator);
 				this->_count++;
-				if (!_tree || _tree == _end)
-				{
+				if (!_tree)
 					_tree = _add_with_balance(_tree, _value, _tree, value_compare(), _allocator);
-					_tree->parent_node = _end;
-				}
 				else if (value_compare()(_tree->data, pos->data) && value_compare()(_value, _tree->data))
-					_tree =  _add_with_balance(_tree, _value, _tree, value_compare(), _allocator);
+					_tree =  _add_with_balance(_tree, _value, _end, value_compare(), _allocator);
 				else if (value_compare()(pos->data , _tree->data) && value_compare()(_tree->data, _value))
-					_tree = _add_with_balance(_tree, _value, _tree, value_compare(), _allocator);
+					_tree = _add_with_balance(_tree, _value, _end, value_compare(), _allocator);
 				else
 					pos = _add_with_balance(pos, _value, pos, value_compare(), _allocator);
-				// _M_erase(_end->parent_node);
-				// this->_end->parent_node = this->_tree->_maximum(_tree);
-				//this->_end->left_node = _tree;
+				this->_end->left_node = this->_tree;
+				this->_end->parent_node = this->_tree->_maximum(_tree);
 			}
 			
 			_Base_ptr search(_Base_ptr _node, _Val _value) const
@@ -145,7 +142,6 @@ namespace ft
 			{
 				_M_erase(_tree);
 				_count = 0;
-				_tree = _end;
 			}
 
 			int get_balance() { return _get_balance(this->_tree); }
@@ -153,11 +149,10 @@ namespace ft
 			void delete_node(const _Val& _value)
 			{  
 				this->_tree = _delete_node(this->_tree, _value, value_compare(), _allocator);
-				//this->_end->parent_node = _tree->_maximum(_tree);
+				this->_end->parent_node = _tree->_maximum(_tree);
+				this->_end->left_node = this->_tree;
 				//this->_end->left_node = _tree;
 				this->_count--;
-				if (!this->_tree)
-					_tree = _end;
 			}
 
 			allocator_type get_allocator() const { return this->_allocator; }
