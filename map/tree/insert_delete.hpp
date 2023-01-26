@@ -71,6 +71,7 @@ namespace ft
 				_node->left_node = _delete_node(_node->left_node, _value, comp, _alloc);
 				_Base_ptr left = _node->left_node;
 				_Base_ptr right = _node->right_node;
+				_alloc.destroy(_node);
 				_alloc.construct(_node, _value);
 				_node->parent_node = parent;
 				_node->left_node = left;

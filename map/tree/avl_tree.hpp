@@ -36,13 +36,13 @@ namespace ft
 		private:
 			void _M_erase(_Base_ptr _x)
 			{
+				//static int i;
 				if (_x)
 				{
 					_M_erase(_x->left_node);
 					_M_erase(_x->right_node);
 					this->_allocator.destroy(_x);
 					this->_allocator.deallocate(_x, 1);
-					_x = NULL;
 				}	
 			}
 
@@ -99,13 +99,11 @@ namespace ft
 				if (!ret)
 				{
 					this->_tree = _add_with_balance(this->_tree, _value, this->_end, value_compare(), _allocator);
-					_Base_ptr max = _tree->_maximum(_tree);
-					this->_end->parent_node = max;
+					this->_end->parent_node = _tree->_maximum(_tree);
 					this->_end->left_node = this->_tree;
 					this->_count++;
-					ret = search(this->_tree, _value);
 				}
-				return ret;
+				return _tree;
 			}
 
 			void insert(_Base_ptr pos, const _Val& _value)
@@ -114,11 +112,11 @@ namespace ft
 					create_node(&_end, _Val(), _allocator);
 				this->_count++;
 				if (!_tree)
-					_tree = _add_with_balance(_tree, _value, _tree, value_compare(), _allocator);
+					_tree = insert(_value);
 				else if (value_compare()(_tree->data, pos->data) && value_compare()(_value, _tree->data))
-					_tree =  _add_with_balance(_tree, _value, _end, value_compare(), _allocator);
+					_tree = insert(_value);
 				else if (value_compare()(pos->data , _tree->data) && value_compare()(_tree->data, _value))
-					_tree = _add_with_balance(_tree, _value, _end, value_compare(), _allocator);
+					_tree = insert(_value);
 				else
 					pos = _add_with_balance(pos, _value, pos, value_compare(), _allocator);
 				this->_end->left_node = this->_tree;
@@ -140,7 +138,9 @@ namespace ft
 
 			void clear() 
 			{
-				_M_erase(_tree);
+				_M_erase(_end);
+				_end = 0;
+				_tree = 0;
 				_count = 0;
 			}
 
@@ -151,8 +151,9 @@ namespace ft
 				this->_tree = _delete_node(this->_tree, _value, value_compare(), _allocator);
 				this->_end->parent_node = _tree->_maximum(_tree);
 				this->_end->left_node = this->_tree;
-				//this->_end->left_node = _tree;
-				this->_count--;
+				--this->_count;
+				if (this->_count == 0)
+					clear();
 			}
 
 			allocator_type get_allocator() const { return this->_allocator; }
@@ -249,7 +250,7 @@ namespace ft
 
 			~avl_tree()
 			{
-				_M_erase(_tree);
+				_M_erase(_end);
 			}
 	};
 

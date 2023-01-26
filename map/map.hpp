@@ -35,7 +35,8 @@ namespace ft
 			};
 
 		private:
-			typedef typename Allocator::value_type								allocator_value_type;
+			//başta bir yapı gelirse onun allocator unu kullanmak için
+			typedef typename Allocator::template rebind<value_type>::other		allocator_value_type;
 			typedef ft::avl_tree<value_type, value_compare, allocator_type>		_Rep_type;
 
 			_Rep_type _M_t;
@@ -53,13 +54,11 @@ namespace ft
 			typedef typename _Rep_type::reverse_iterator		reverse_iterator;
 			typedef typename _Rep_type::const_reverse_iterator	const_reverse_iterator;
 
-//			~map() {}
-
 			map() : _M_t(key_compare(), allocator_type()) {}
 
 			map( const map& other) : _M_t(other._M_t) {}
 
-			explicit map(const Compare& comp, const Allocator& alloc = Allocator()) : _M_t(_Rep_type(value_compare(key_compare()))), key_compare(comp), allocator_type(alloc)  {}
+			explicit map(const Compare& comp, const Allocator& alloc = Allocator()) : _M_t(comp, allocator_value_type(alloc)){}
 
 			template <typename _InputIterator>
 			explicit map(_InputIterator first, _InputIterator last, const Compare _comp = Compare(), const allocator_type& _a = allocator_type() ) : _M_t(_comp, _a)
@@ -83,7 +82,9 @@ namespace ft
 				_Base_ptr ret = _M_t.search(this->_M_t._tree, value);
 				if (ret)
 					return  ft::pair<iterator, bool>(iterator(ret), false);
-				return ft::pair<iterator, bool>(iterator(_M_t.insert(value)), true);
+				else
+					_M_t.insert(value);
+				return ft::pair<iterator, bool>(iterator(_M_t.search(this->_M_t._tree, value)), true);
 			}
 
 			iterator insert( iterator pos, const value_type& value )
@@ -92,7 +93,7 @@ namespace ft
 					insert(value);
 				else
 					_M_t.insert(pos._M_node, value);
-				return iterator(_M_t.search(_M_t._tree, value));
+				return lower_bound(value.first);
 			}
 
 			template< class InputIt >
@@ -225,7 +226,7 @@ namespace ft
 			const_iterator find( const Key& key ) const
 			{
 				const_iterator find = iterator(_M_t.lower_bound(ft::make_pair(key, mapped_type())));
-				return (find == end() || key_compare()(key, _M_t._tree->data.first) ? end() : find);
+				return (find == end() || key_compare()(key, find->first) ? end() : find);
 			}
 
 			ft::pair<iterator,iterator> equal_range( const Key& key )
