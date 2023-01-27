@@ -36,7 +36,6 @@ namespace ft
 		private:
 			void _M_erase(_Base_ptr _x)
 			{
-				//static int i;
 				if (_x)
 				{
 					_M_erase(_x->left_node);
@@ -48,21 +47,21 @@ namespace ft
 
 		public:
 
-			avl_tree(): _tree(), _end(), _count(0), _key_compare(), _allocator() 
-			{ 
-
+			avl_tree(): _tree(), _end(), _count(0), _key_compare(), _allocator()
+			{
+				create_node(&this->_end, _Val(), _allocator);
 			}
 
 			avl_tree(const _Compare& _comp, const allocator_type& _a = allocator_type()) : _tree(), _end(), _count(0), _key_compare(_comp), _allocator(_a)
 			{
-
+				create_node(&this->_end, _Val(), _allocator);
 			}
 
 			avl_tree (const avl_tree& _x) : _count(0), _key_compare(_x._key_compare), _allocator(_x._allocator)
 			{
+				create_node(&this->_end, _Val(), _allocator);
 				if (_x._tree)
 				{
-					create_node(&this->_end, _Val(), _allocator);
 					this->_tree = _copy(this->_tree, _x._tree, _end, _allocator);
 					this->_end->parent_node = _tree->_maximum(_tree);
 					this->_count = _x._count;
@@ -108,17 +107,17 @@ namespace ft
 
 			void insert(_Base_ptr pos, const _Val& _value)
 			{
-				if(!_end)
-					create_node(&_end, _Val(), _allocator);
-				this->_count++;
-				if (!_tree)
+				if (!_tree || _tree == _end)
 					_tree = insert(_value);
 				else if (value_compare()(_tree->data, pos->data) && value_compare()(_value, _tree->data))
 					_tree = insert(_value);
 				else if (value_compare()(pos->data , _tree->data) && value_compare()(_tree->data, _value))
 					_tree = insert(_value);
 				else
+				{
 					pos = _add_with_balance(pos, _value, pos, value_compare(), _allocator);
+					this->_count++;
+				}
 				this->_end->left_node = this->_tree;
 				this->_end->parent_node = this->_tree->_maximum(_tree);
 			}
@@ -152,15 +151,16 @@ namespace ft
 				this->_end->parent_node = _tree->_maximum(_tree);
 				this->_end->left_node = this->_tree;
 				--this->_count;
-				if (this->_count == 0)
-					clear();
+				// if (this->_count == 0)
+				// 	clear();
 			}
 
 			allocator_type get_allocator() const { return this->_allocator; }
 
-			iterator begin() { return iterator(this->_tree->_minimum(_tree)); }
+			iterator begin() 
+			{ return iterator(this->_tree->_minimum(_end)); }
 			
-			const_iterator begin() const { return const_iterator(this->_tree->_minimum(_tree)); }
+			const_iterator begin() const { return const_iterator(this->_tree->_minimum(_end)); }
 			
 			iterator end() { return iterator(this->_end); }
 			

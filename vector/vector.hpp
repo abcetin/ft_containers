@@ -45,7 +45,11 @@ namespace ft
 					return;
 				size_type len = (last - first);
 				size_type oldCap = capacity();
-				size_type newCap = !oldCap ? len : size() + len;
+				size_type newCap = !oldCap ? len : oldCap;
+				if ((size() + len) > newCap * 2)
+					newCap = size() + len;
+				else if ((size() + len) > newCap)
+					newCap *= 2;
 				pointer newData = this->_allocator_type.allocate(newCap);
 				pointer newEnd = newData;
 				for(iterator it = begin(); it != pos; it++, newEnd++)
@@ -80,15 +84,19 @@ namespace ft
 		public:
 			vector() 
 			{
-				this->_start = 0;
-				this->_finish = 0;
-				this->_end_of_capacity = 0;
+				this->_start = NULL;
+				this->_finish = this->_start;
+				this->_end_of_capacity = this->_finish;
 			}
 
-        	explicit vector(const allocator_type& alloc): _allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0){};//
-
+        	explicit vector(const allocator_type& alloc): _allocator_type(alloc)
+			{
+				this->_start = NULL;
+				this->_finish = this->_start;
+				this->_end_of_capacity = this->_finish;
+			};
             explicit vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()): 
-			_allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0) //
+			_allocator_type(alloc), _start(0), _finish(0), _end_of_capacity(0)
 			{
 				size_type i = 0;
 
@@ -110,7 +118,10 @@ namespace ft
 
             vector( const vector& other ) : _allocator_type(other.get_allocator()) 
 			{
-				this->_start = this->_allocator_type.allocate(other.capacity());
+				if (other.capacity())
+					this->_start = this->_allocator_type.allocate(other.capacity());
+				else
+					this->_start = NULL;
 				this->_finish = this->_start;
 				this->_end_of_capacity = this->_start + other.capacity();
 				for (size_t i = 0; i < other.size(); i++)
@@ -188,7 +199,7 @@ namespace ft
 
             template< class InputIterator > void assign( InputIterator first, InputIterator last, typename ft::enable_if<!is_integral<InputIterator>::value, bool>::type = true)
 			{
-				typedef typename std::iterator_traits<InputIterator>::iterator_category iter;
+				typedef typename ft::iterator_traits<InputIterator>::iterator_category iter;
 				if (ft::__are_same<iter, std::random_access_iterator_tag>::__value)
 				{
 					difference_type _len = std::distance(first, last);
@@ -271,7 +282,7 @@ namespace ft
 
             bool empty() const {return begin() == end();}
 
-            size_type size() const {return size_type(this->_finish - this->_start);}
+            size_type size() const { return size_type(this->_finish - this->_start); }
 
             size_type max_size() const{return std::min<size_type>(this->_allocator_type.max_size(), std::numeric_limits<difference_type>::max());}
 
@@ -377,7 +388,7 @@ namespace ft
 			iterator insert(iterator pos, InputIt first, InputIt last,
 			typename ft::enable_if<!is_integral<InputIt>::value, bool>::type = true)
 			{
-			 	typedef typename std::iterator_traits<InputIt>::iterator_category iter;
+			 	typedef typename ft::iterator_traits<InputIt>::iterator_category iter;
 				_insert(pos, first, last, iter());
 				return pos;
 			}

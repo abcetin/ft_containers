@@ -27,6 +27,8 @@ namespace ft
 		
 		public:
 
+			//stack() {}
+
 			stack(const stack& other) : c(other.c) {}
 
 			explicit stack( const Container& cont = Container() ) : c(cont) {}
